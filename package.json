@@ -13,5 +13,9 @@
     "@typescript-eslint/parser": "^4.15.0",
     "eslint": "^7.19.0",
     "eslint-config-standard": "^16.0.2"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "mongoose": "^5.11.15"
   }
 }
