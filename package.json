@@ -2,19 +2,21 @@
   "name": "niv",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "dist/server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon src/index.js",
+    "dev": "nodemon src/index.js"
   },
   "author": "Kaustubh Murumkar",
   "license": "ISC",
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^4.15.0",
-    "@typescript-eslint/parser": "^4.15.0",
     "eslint": "^7.19.0",
-    "eslint-config-standard": "^16.0.2"
+    "eslint-config-standard": "^16.0.2",
+    "nodemon": "^2.0.7"
   },
   "dependencies": {
+    "cors": "^2.8.5",
     "express": "^4.17.1",
     "mongoose": "^5.11.15"
   }
