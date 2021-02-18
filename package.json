@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon src/index.js",
-    "dev": "nodemon src/index.js"
+    "dev": "nodemon src/index.js",
+		"lint": "eslint src/**.js --fix"
   },
   "author": "Kaustubh Murumkar",
   "license": "ISC",
