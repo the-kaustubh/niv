@@ -1,0 +1,23 @@
+const express = require('express')
+const router = express.Router()
+const Reading = require('../models/readings')
+
+router.post('/reading', async (req, res) => {
+  try {
+    const reading = new Reading(req.body)
+    const savedReading = reading.save()
+    console.log(savedReading)
+    if (savedReading == null) {
+      throw new Error('Could not save.')
+    }
+    res.status(201).json(
+      {
+        msg: 'OK'
+      }
+    )
+  } catch (err) {
+    res.status(500).json({ msg: err.message })
+  }
+})
+
+module.exports = router
