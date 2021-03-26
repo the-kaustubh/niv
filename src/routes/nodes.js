@@ -38,6 +38,25 @@ router.get('/readings/:uid', authenticateToken, async (req, res) => {
   }
 })
 
+router.get('/readings/all/:uid', authenticateToken, async (req, res) => {
+  const UID = req.params.uid
+  console.log(UID)
+  let readings
+  try {
+    // if (!req.user.nodes.includes(UID)) {
+    //   return res.sendStatus(403)
+    // }
+    readings = await Reading.find({
+      uid: UID
+    }).sort({
+      datetime: -1
+    })
+    res.status(200).json(readings)
+  } catch (err) {
+    res.status(500).json({ message: err.message })
+  }
+})
+
 router.post('/add', authenticateToken, async (req, res) => {
   req.body.user = req.user.username
   const node = new Node({
