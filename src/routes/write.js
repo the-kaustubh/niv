@@ -4,7 +4,7 @@ const Reading = require('../models/readings')
 
 router.post('/reading', async (req, res) => {
   try {
-    if (req.body.backup === true) {
+    if (req.body.backup === '1') {
       const dt = req.body.datetime * 1000
       req.body.datetime = new Date(dt)
     }
