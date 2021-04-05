@@ -1,5 +1,4 @@
 const mongoose = require('mongoose')
-
 const nodeSchema = new mongoose.Schema({
   uid: {
     type: String,
@@ -10,22 +9,16 @@ const nodeSchema = new mongoose.Schema({
     required: true
   },
   temperature: {
-    type: Number,
-    default: 0.0
+    type: String
   },
   humidity: {
-    type: Number,
-    default: 0.0
-
+    type: String
   },
   pressure: {
-    type: Number,
-    default: 0.0
-
+    type: String
   },
   co2: {
-    type: Number,
-    default: 0.0
+    type: String
   },
   datetime: {
     type: Date,
@@ -33,5 +26,4 @@ const nodeSchema = new mongoose.Schema({
     default: Date.now
   }
 })
-
 module.exports = mongoose.model('reading', nodeSchema)
