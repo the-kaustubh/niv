@@ -42,7 +42,9 @@ router.post('/login', async (req, res) => {
         designation: user.designation
       }
       const accessToken = jwt.sign(data, process.env.ACCESS_TOKEN_SECRET)
-      res.json({ accessToken: accessToken, designation: user.designation })
+      res.json(
+        { accessToken: accessToken, designation: user.designation }
+      )
     } else {
       res.json({ message: 'Not Allowed' })
     }

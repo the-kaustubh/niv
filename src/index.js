@@ -5,6 +5,14 @@ const app = express()
 const mongoose = require('mongoose')
 const cors = require('cors')
 
+app.use(cors())
+
+app.use(function (_req, res, next) {
+  res.header('Content-Type', 'application/json')
+  res.header('Access-Control-Allow-Origin', '*')
+  next()
+})
+
 mongoose.connect(
   process.env.DATABASE_URL,
   {

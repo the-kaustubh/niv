@@ -8,10 +8,10 @@ const authenticateToken = require('../middleware/authToken')
 router.get('/', authenticateToken, async (req, res) => {
   try {
     let nodes
-    if (req.user.privilege > 1) {
-      nodes = await Node.find({ user: req.user.username })
-    } else {
+    if ( req.user.privilege === 1 || req.user.privilege === 3) {
       nodes = await Node.find({ location: req.user.institute })
+    } else {
+      nodes = await Node.find({ user: req.user.username })
     }
     res.json(nodes)
   } catch (err) {
@@ -32,8 +32,11 @@ router.get('/readings/:uid', authenticateToken, async (req, res) => {
     }).sort({
       datetime: -1
     })
+    delete readings[0].__v
+    console.log(readings[0])
     res.status(200).json(readings[0])
   } catch (err) {
+    console.log(err.message)
     res.status(500).json({ message: err.message })
   }
 })

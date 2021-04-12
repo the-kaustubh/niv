@@ -49,7 +49,7 @@ DELETE /node/100000
 --
 POST /write/reading
 {
-  "uid": "100001",
+  "uid": "100002",
   "temperature": "27.6", 
   "humidity": "59",
   "co2": "0.5",
@@ -61,7 +61,7 @@ POST /write/reading
 --
 POST /write/reading
 {
-  "uid": "100000",
+  "uid": "100002",
   "temperature": "30.6",
   "humidity": "5",
   "co2": "18.0",
