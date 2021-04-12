@@ -8,7 +8,7 @@ const authenticateToken = require('../middleware/authToken')
 router.get('/', authenticateToken, async (req, res) => {
   try {
     let nodes
-    if ( req.user.privilege === 1 || req.user.privilege === 3) {
+    if (req.user.privilege === 1 || req.user.privilege === 3) {
       nodes = await Node.find({ location: req.user.institute })
     } else {
       nodes = await Node.find({ user: req.user.username })
