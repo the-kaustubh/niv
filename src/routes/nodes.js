@@ -61,6 +61,7 @@ router.get('/readings/all/:uid', authenticateToken, async (req, res) => {
 })
 
 router.post('/add', authenticateToken, async (req, res) => {
+  console.log('POST /node/add')
   req.body.user = req.user.username
   const node = new Node({
     uid: req.body.uid,
