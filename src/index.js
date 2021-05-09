@@ -4,20 +4,8 @@ const express = require('express')
 const app = express()
 const mongoose = require('mongoose')
 const cors = require('cors')
-
-app.use(cors())
-
-app.use(function (req, res, next) {
-  res.setHeader('Access-Control-Allow-Origin', '*')
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE')
-  res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type')
-  res.setHeader('Access-Control-Allow-Credentials', true)
-  if (req.method === 'OPTIONS') {
-    return res.sendStatus(200)
-  } else {
-    next()
-  }
-})
+const path = require('path')
+const compression = require('compression')
 
 mongoose.connect(
   process.env.DATABASE_URL,
@@ -28,21 +16,25 @@ mongoose.connect(
     useCreateIndex: true
   })
 
+app.use(express.json())
+app.use(cors())
+app.use(compression())
+
+app.use(express.static(path.resolve(__dirname, 'public')))
+
 const db = mongoose.connection
 db.on('error', (err) => console.error(err))
 db.once('open', () => console.log('Connected to Database'))
 
-app.use(express.json())
-app.use(cors())
+app.get('/', (_req, res) => {
+  res.sendFile('index.html')
+})
 
 const nodeRouter = require('./routes/nodes')
 app.use('/node', nodeRouter)
 
 const userRouter = require('./routes/users')
 app.use('/user', userRouter)
-
-// const clientRouter = require('./routes/clients')
-// app.use('/client', clientRouter)
 
 const writeRouter = require('./routes/write')
 app.use('/write', writeRouter)
