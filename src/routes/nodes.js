@@ -21,7 +21,6 @@ router.get('/', authenticateToken, async (req, res) => {
 
 router.get('/readings/:uid', authenticateToken, async (req, res) => {
   const UID = req.params.uid
-  console.log(UID)
   let readings
   try {
     // if (!req.user.nodes.includes(UID)) {
@@ -33,17 +32,14 @@ router.get('/readings/:uid', authenticateToken, async (req, res) => {
       datetime: -1
     })
     delete readings[0].__v
-    console.log(readings[0])
     res.status(200).json(readings[0])
   } catch (err) {
-    console.log(err.message)
     res.status(500).json({ message: err.message })
   }
 })
 
 router.get('/readings/all/:uid', authenticateToken, async (req, res) => {
   const UID = req.params.uid
-  console.log(UID)
   let readings
   try {
     // if (!req.user.nodes.includes(UID)) {
@@ -61,7 +57,6 @@ router.get('/readings/all/:uid', authenticateToken, async (req, res) => {
 })
 
 router.post('/add', authenticateToken, async (req, res) => {
-  console.log('POST /node/add')
   req.body.user = req.user.username
   const node = new Node({
     uid: req.body.uid,
@@ -84,10 +79,6 @@ router.post('/add', authenticateToken, async (req, res) => {
       reading: newReading
     })
   } catch (err) {
-    if (process.env.test) {
-      console.log(err)
-    }
-    console.log(err.message)
     res.status(400).json({ message: err.message })
   }
 })

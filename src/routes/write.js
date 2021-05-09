@@ -8,7 +8,6 @@ router.post('/reading', async (req, res) => {
       const dt = req.body.datetime * 1000
       req.body.datetime = new Date(dt)
     }
-    console.log(req.body)
     const reading = new Reading(req.body)
     const savedReading = await reading.save()
     if (savedReading == null) {

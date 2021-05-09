@@ -10,7 +10,6 @@ async function getNodes (req, _res, next) {
     })
     req.nodes = node
   } catch (e) {
-    console.log(e.message)
     req.err = e.message
   }
   next()

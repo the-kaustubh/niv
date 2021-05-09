@@ -10,7 +10,6 @@ async function getReading (req, _res, next) {
     })
     req.reading = reading[0]
   } catch (e) {
-    console.log(e.message)
     req.err = e.message
   }
   next()

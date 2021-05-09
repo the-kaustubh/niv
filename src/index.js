@@ -23,7 +23,7 @@ app.use(compression())
 app.use(express.static(path.resolve(__dirname, 'public')))
 
 const db = mongoose.connection
-db.on('error', (err) => console.error(err))
+db.on('error', (e) => console.log(e))
 db.once('open', () => console.log('Connected to Database'))
 
 app.get('/', (_req, res) => {
@@ -39,10 +39,8 @@ app.use('/user', userRouter)
 const writeRouter = require('./routes/write')
 app.use('/write', writeRouter)
 
-app.get('/', (_req, res) => {
-  res.json({ msg: 'Server Up' })
-})
+app.set('port', process.env.PORT || 3000)
 
-app.listen(process.env.PORT || 3000, () => console.log('Server Started'))
+app.listen(app.get('port'), () => console.log(`Server started @ http://localhost:${app.get('port')}`))
 
 module.exports = app
