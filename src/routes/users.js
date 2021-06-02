@@ -83,4 +83,10 @@ router.post('/delete', authToken, async (req, res) => {
   }
 })
 
+router.get('/about', authToken, async (req, res) => {
+  res.status(200).json({
+    user: req.user
+  })
+})
+
 module.exports = router

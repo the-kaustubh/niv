@@ -1,0 +1,21 @@
+- [ ] threshold 
+- [ ] node ok/not-ok
+- [ ] logo
+- [ ] Attribute observer to user
+- [X] IP address on webapp
+- [ ] Forgot password
+- [ ] Notification
+
+- [X] Wifi Reconnection
+- [X] sleep mode & lcd
+- [X] reset
+- [X] firmware web page
+- [X] firmware lcd
+  - [X] self ip
+  - [X] server ip
+  - [X] UID
+  - [X] Battery
+  - [X] Temperature if only Temperature
+  - [X] CO2
+  - [X] Humidity
+  - [X] Server

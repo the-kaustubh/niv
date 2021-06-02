@@ -87,3 +87,6 @@ GET /node/readings/100000
 
 --
 GET /node/readings/all/100000
+
+--
+GET /user/about
