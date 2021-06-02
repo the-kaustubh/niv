@@ -26,10 +26,6 @@ const db = mongoose.connection
 db.on('error', (e) => console.log(e))
 db.once('open', () => console.log('Connected to Database'))
 
-app.get('/', (_req, res) => {
-  res.sendFile('index.html')
-})
-
 const nodeRouter = require('./routes/nodes')
 app.use('/node', nodeRouter)
 
@@ -38,6 +34,10 @@ app.use('/user', userRouter)
 
 const writeRouter = require('./routes/write')
 app.use('/write', writeRouter)
+
+app.get(/.*/, (_req, res) => {
+  res.sendFile(path.resolve(__dirname, 'public', 'index.html'))
+})
 
 app.set('port', process.env.PORT || 3000)
 
