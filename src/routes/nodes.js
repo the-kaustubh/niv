@@ -15,7 +15,7 @@ router.get('/', authenticateToken, async (req, res) => {
     }
     res.json(nodes)
   } catch (err) {
-    res.status(500).json({ message: err.message })
+    res.json({ message: err.message })
   }
 })
 

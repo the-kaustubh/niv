@@ -8,22 +8,25 @@ async function authenticateToken (req, res, next) {
   if (token == null) return res.sendStatus(401)
   let usr
 
-  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
-    if (err) return res.sendStatus(403)
-    usr = user
-  })
+  try {
+    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
+      if (err) throw new Error('Invalid User')
+      usr = user
+    })
 
-  const userPresent = await User.findOne({
-    username: usr.username
-  })
+    const userPresent = await User.findOne({
+      username: usr.username
+    })
 
-  if (userPresent == null) {
-    return res.sendStatus(403)
+    if (userPresent == null) {
+      return res.sendStatus(403)
+    }
+
+    req.user = userPresent
+    next()
+  } catch (e) {
+    res.status(403).json({ msg: e.message })
   }
-
-  req.user = userPresent
-
-  next()
 }
 
 module.exports = authenticateToken

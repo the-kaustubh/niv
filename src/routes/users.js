@@ -7,6 +7,7 @@ const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const authToken = require('../middleware/authToken')
 const privilegeLevels = require('../models/usersPrivilege')
+const { sendResetLink, verifyToken } = require('../util/reset')
 
 router.post('/register', async (req, res) => {
   try {
@@ -21,7 +22,17 @@ router.post('/register', async (req, res) => {
       privilege: privilege
     })
     const newUser = await user.save()
-    res.status(200).json(newUser)
+    if (newUser !== null) {
+      const data = {
+        username: newUser.username,
+        institute: newUser.institute,
+        designation: newUser.designation
+      }
+      const accessToken = jwt.sign(data, process.env.ACCESS_TOKEN_SECRET)
+      res.status(201).json(
+        { accessToken: accessToken, designation: user.designation }
+      )
+    }
   } catch (err) {
     res.status(400).json({ message: err.message })
   }
@@ -32,7 +43,7 @@ router.post('/login', async (req, res) => {
     username: req.body.username
   }).exec()
   if (user == null) {
-    return res.status(400).json({ message: 'Cannot Find' })
+    return res.status(400).json({ message: 'Invalid User'})
   }
   try {
     if (await bcrypt.compare(req.body.password, user.password)) {
@@ -42,14 +53,52 @@ router.post('/login', async (req, res) => {
         designation: user.designation
       }
       const accessToken = jwt.sign(data, process.env.ACCESS_TOKEN_SECRET)
-      res.json(
+      res.status(201).json(
         { accessToken: accessToken, designation: user.designation }
       )
     } else {
-      res.json({ message: 'Not Allowed' })
+      res.status(403).json({ message: 'Incorrect Username or Password' })
     }
   } catch (err) {
     res.status(500).json({ message: err.message })
+  }
+})
+
+router.post('/forgot', async (req, res) => {
+  try {
+    const user = await User.findOne({
+      username: req.body.username
+    })
+    if (user == null) {
+      throw new Error('No such user was found')
+    }
+    const stat = await sendResetLink(user)
+    if (stat) {
+      res.json({ msg: "Link was sent to the user's email" })
+    } else {
+      throw new Error('Could not send mail')
+    }
+  } catch (e) {
+    res.json({ msg: e.message })
+  }
+})
+
+router.post('/resetpwd', async (req, res) => {
+  try {
+    const token = req.body.token
+    const newPwd = req.body.password
+    const hashedPassword = await bcrypt.hash(newPwd, 10)
+    const userdata = await verifyToken(token)
+
+    const newUser = await User.findOneAndUpdate(userdata.id,
+      { $set: { password: hashedPassword } }
+    )
+
+    res.status(201).json({
+      newUser
+    })
+  } catch (e) {
+    res.json({ msg: e.message })
   }
 })
 
