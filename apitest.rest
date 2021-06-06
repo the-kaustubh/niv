@@ -1,5 +1,5 @@
-# https://niv-backend.herokuapp.com
-http://localhost:3000
+https://niv-backend.herokuapp.com
+# http://localhost:3000
 -i
 Accept: */*
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImthdXN0dWJoIiwiaW5zdGl0dXRlIjoianNwbSIsImRlc2lnbmF0aW9uIjoiYWRtaW4iLCJpYXQiOjE2MjAzMDM3NjV9.YHyPBDi8rtAUwUg9HN9y8ke3aNkApfopJ1t9mOxkHIY
@@ -60,8 +60,8 @@ DELETE /node/100000
 --
 POST /write/reading
 {
-  "uid": "100000",
-  "temperature": "27.6", 
+  "uid": "100003",
+  "temperature": "276", 
   "humidity": "59",
   "co2": "0.5",
   "pressure": "11",
