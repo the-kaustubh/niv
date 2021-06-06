@@ -21,7 +21,7 @@ const sendResetLink = async (user) => {
       subject: ' Password Reset ',
       html: `<b> Hello ${user.username}</b>, you had requested for password reset <br>
       Here is your password reset link <br>
-      http://${process.env.HOST}:${process.env.PORT}/password-reset/${token}
+      http://${process.env.HOST}/password-reset/${token}
       `
     })
     console.log(info)
