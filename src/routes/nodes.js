@@ -47,9 +47,7 @@ router.get('/readings/all/:uid', authenticateToken, async (req, res) => {
     // }
     readings = await Reading.find({
       uid: UID
-    }).sort({
-      datetime: -1
-    })
+    }).sort()
     res.status(200).json(readings)
   } catch (err) {
     res.status(500).json({ message: err.message })
