@@ -1,6 +1,8 @@
 const express = require('express')
 const router = express.Router()
 const Reading = require('../models/readings')
+const checkHealthNodes = require('../util/checkHealthNodes')
+const reportMail = require('../util/reportMail')
 
 router.post('/reading', async (req, res) => {
   try {
@@ -8,11 +10,21 @@ router.post('/reading', async (req, res) => {
       const dt = parseInt(req.body.datetime) * 1000
       req.body.datetime = new Date(dt)
     }
+
     const reading = new Reading(req.body)
     const savedReading = await reading.save()
     if (savedReading == null) {
       throw new Error('Could not save.')
     }
+
+    const healthy = await checkHealthNodes(req.body)
+    console.log(healthy)
+    console.log(req.body.uid)
+    if (!healthy) {
+      console.log('here')
+      await reportMail(req.body.uid)
+    }
+
     res.status(201).json(
       {
         msg: 'OK'

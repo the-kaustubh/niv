@@ -6,6 +6,8 @@ const mongoose = require('mongoose')
 const cors = require('cors')
 const path = require('path')
 const compression = require('compression')
+const nodeCron = require('node-cron')
+const printAllFaultyNodes = require('./util/printAllFaultyNodes')
 
 mongoose.connect(
   process.env.DATABASE_URL,
@@ -40,6 +42,13 @@ app.get(/.*/, (_req, res) => {
 })
 
 app.set('port', process.env.PORT || 3000)
+
+// Adding cron jobs
+const cronstring = (process.env.NODE_ENV === 'production') ? '* */5 * * *' : '*/10 * * * * *'
+const task = nodeCron.schedule(cronstring, () => {
+  // printAllFaultyNodes()
+})
+task.start()
 
 app.listen(app.get('port'), () => console.log(`Server started @ http://localhost:${app.get('port')}`))
 

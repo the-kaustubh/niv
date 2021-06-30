@@ -25,7 +25,13 @@ const userSchema = new mongoose.Schema({
   password: {
     type: String,
     required: true
-  }
+  },
+  mailSent: {
+    type: Date
+  },
+  faulty: [{
+    type: String
+  }]
 })
 
 module.exports = mongoose.model('user', userSchema)

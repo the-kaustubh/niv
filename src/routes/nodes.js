@@ -1,9 +1,11 @@
 const express = require('express')
 const router = express.Router()
 const Node = require('../models/nodes')
+const User = require('../models/users')
 const Reading = require('../models/readings')
 
 const authenticateToken = require('../middleware/authToken')
+const sendMailCSV = require('../util/mailCSV')
 
 router.get('/', authenticateToken, async (req, res) => {
   try {
@@ -127,6 +129,34 @@ router.delete('/:uid', authenticateToken, async (req, res) => {
     })
   } catch (err) {
     res.status(503).json({ message: err.message })
+  }
+})
+
+router.get('/getcsv/:uid', async (req, res) => {
+  try {
+    const node = await Node.findOne({ uid: req.params.uid })
+    const username = node.user
+    const user = await User.findOne({ username: username })
+    const readingsDB = await Reading.find({ uid: req.params.uid })
+    const readingsToSend = []
+    for (let i = 0; i < readingsDB.length; i++) {
+      readingsToSend.push({
+        uid: readingsDB[i].uid,
+        user: readingsDB[i].user,
+        datetime: readingsDB[i].datetime,
+        pressure: readingsDB[i].pressure,
+        humidity: readingsDB[i].humidity,
+        co2: readingsDB[i].co2,
+        temperature: readingsDB[i].temperature
+      })
+    }
+
+    const resp = sendMailCSV(req.params.uid, user.email, readingsToSend)
+    if (resp) {
+      res.json({ msg: 'File sent to mail: ' + user.email })
+    } else throw new Error('Could not send mail')
+  } catch (err) {
+    res.json({ msg: err.message })
   }
 })
 

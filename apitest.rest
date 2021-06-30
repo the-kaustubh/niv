@@ -61,7 +61,7 @@ DELETE /node/100000
 POST /write/reading
 {
   "uid": "100000",
-  "temperature": "29.22",
+  "temperature": "329.22",
   "humidity": "59",
   "co2": "0.5",
   "pressure": "11",
@@ -89,3 +89,6 @@ GET /node/readings/all/100001
 
 --
 GET /user/about
+
+--
+GET /node/getcsv/100001
