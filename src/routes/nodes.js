@@ -1,11 +1,11 @@
 const express = require('express')
 const router = express.Router()
 const Node = require('../models/nodes')
-const User = require('../models/users')
 const Reading = require('../models/readings')
 
 const authenticateToken = require('../middleware/authToken')
-const sendMailCSV = require('../util/mailCSV')
+const getNode = require('../middleware/getNode')
+const createCSV = require('../util/createCSV')
 
 router.get('/', authenticateToken, async (req, res) => {
   try {
@@ -25,9 +25,6 @@ router.get('/readings/:uid', authenticateToken, async (req, res) => {
   const UID = req.params.uid
   let readings
   try {
-    // if (!req.user.nodes.includes(UID)) {
-    //   return res.sendStatus(403)
-    // }
     readings = await Reading.find({
       uid: UID
     }).sort({
@@ -44,9 +41,6 @@ router.get('/readings/all/:uid', authenticateToken, async (req, res) => {
   const UID = req.params.uid
   let readings
   try {
-    // if (!req.user.nodes.includes(UID)) {
-    //   return res.sendStatus(403)
-    // }
     readings = await Reading.find({
       uid: UID
     }).sort()
@@ -134,10 +128,8 @@ router.delete('/:uid', authenticateToken, async (req, res) => {
 
 router.get('/getcsv/:uid', async (req, res) => {
   try {
-    const node = await Node.findOne({ uid: req.params.uid })
-    const username = node.user
-    const user = await User.findOne({ username: username })
-    const readingsDB = await Reading.find({ uid: req.params.uid })
+    const uid = req.params.uid
+    const readingsDB = await Reading.find({ uid: uid })
     const readingsToSend = []
     for (let i = 0; i < readingsDB.length; i++) {
       readingsToSend.push({
@@ -151,27 +143,12 @@ router.get('/getcsv/:uid', async (req, res) => {
       })
     }
 
-    const resp = sendMailCSV(req.params.uid, user.email, readingsToSend)
-    if (resp) {
-      res.json({ msg: 'File sent to mail: ' + user.email })
-    } else throw new Error('Could not send mail')
+    res.setHeader('Content-Type', 'text/csv')
+    res.setHeader('Content-Disposition', `attachment; filename="data.${uid}.csv"`)
+    await createCSV(readingsToSend, res)
   } catch (err) {
     res.json({ msg: err.message })
   }
 })
-
-async function getNode (req, res, next) {
-  let node
-  try {
-    node = await Node.find({ uid: req.body.uid })
-    if (node == null) {
-      return res.status(404).json({ message: 'Cannot Find Node' })
-    }
-  } catch (err) {
-    return res.status(404).json({ message: err.message })
-  }
-  req.node = node[0]
-  next()
-}
 
 module.exports = router

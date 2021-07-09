@@ -17,13 +17,13 @@ router.post('/reading', async (req, res) => {
       throw new Error('Could not save.')
     }
 
-    const healthy = await checkHealthNodes(req.body)
-    console.log(healthy)
-    console.log(req.body.uid)
-    if (!healthy) {
-      console.log('here')
-      await reportMail(req.body.uid)
-    }
+    //     const healthy = await checkHealthNodes(req.body)
+    //     console.log(healthy)
+    //     console.log(req.body.uid)
+    //     if (!healthy) {
+    //       console.log('here')
+    //       await reportMail(req.body.uid)
+    //     }
 
     res.status(201).json(
       {

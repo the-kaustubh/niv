@@ -1,6 +1,8 @@
 const User = require('../models/users')
 const Node = require('../models/nodes')
 const nodemailer = require('nodemailer')
+
+const FiveHrs = 5 * 60 * 60 * 1000
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
@@ -16,7 +18,7 @@ const reportMail = async (uid) => {
   const user = await User.findOne({ username: username })
 
   const lastMailAt = user.mailSent
-  if (!lastMailAt || new Date() - lastMailAt > 5 * 60 * 60 * 1000) {
+  if (!lastMailAt || new Date() - lastMailAt > FiveHrs) {
     const info = await transporter.sendMail({
       from: '"Kaustubh Murumkar " <kaustubh.murumkar@gmail.com>',
       to: user.email,
