@@ -20,6 +20,9 @@ const nodeSchema = new mongoose.Schema({
   co2: {
     type: String
   },
+  battery: {
+    type: String
+  },
   datetime: {
     type: Date,
     required: true,
