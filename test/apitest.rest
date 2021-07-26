@@ -61,8 +61,8 @@ DELETE /node/100000
 POST /write/reading
 {
   "uid": "100002",
-  "temperature": "329.22",
-  "humidity": "59",
+  "temperature": "29.22",
+  "humidity": "-59",
   "co2": "0.5",
   "pressure": "11",
   "battery": "19",
