@@ -56,7 +56,22 @@ router.post('/add', authenticateToken, async (req, res) => {
     uid: req.body.uid,
     location: req.body.location,
     machineName: req.body.machineName,
-    user: req.user.username
+    user: req.user.username,
+    isTemperature: req.body.isTemp,
+    isHumidity: req.body.isHum,
+    isCO2: req.body.isCO2,
+    temperatureRange: {
+      min: req.body.temperatureRange.min,
+      max: req.body.temperatureRange.max
+    },
+    humidityRange: {
+      min: req.body.humidityRange.min,
+      max: req.body.humidityRange.max
+    },
+    co2Range: {
+      min: req.body.co2Range.min,
+      max: req.body.co2Range.max
+    }
   })
   const reading = new Reading({
     uid: req.body.uid,
@@ -73,6 +88,7 @@ router.post('/add', authenticateToken, async (req, res) => {
       reading: newReading
     })
   } catch (err) {
+    console.log('err: ' + err)
     res.status(400).json({ message: err.message })
   }
 })

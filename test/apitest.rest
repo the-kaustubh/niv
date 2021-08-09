@@ -34,8 +34,8 @@ POST /user/register
 --
 POST /user/login
 {
-  "username": "kaustubh",
-  "password": "kaustubh"
+  "username": "sbmohite",
+  "password": "admin"
 }
 
 --
@@ -50,7 +50,7 @@ POST /node/add
 {
   "uid": "100000",
   "location": "lab1",
-  "machineName": "freezer"
+  "machineName": "freezer",
 }
 
 
@@ -61,10 +61,7 @@ DELETE /node/100000
 POST /write/reading
 {
   "uid": "100003",
-  "temperature": "29.22",
-  "humidity": "59",
-  "co2": "0.5",
-  "pressure": "11",
+  "co2": "5.2",
   "battery": "19",
   "user": "kaustubh"
 }
@@ -72,7 +69,7 @@ POST /write/reading
 --
 POST /write/reading
 {
-  "uid": "100001",
+  "uid": "100003",
   "temperature": "30.6",
   "humidity": "5",
   "co2": "18.0",

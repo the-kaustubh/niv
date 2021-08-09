@@ -23,6 +23,18 @@ const nodeSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  isTemperature: {
+    type: Boolean,
+    required: true
+  },
+  isHumidity: {
+    type: Boolean,
+    required: true
+  },
+  isCO2: {
+    type: Boolean,
+    required: true
+  },
   co2Range: {
     type: RangeSchema,
     default: {
