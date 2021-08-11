@@ -61,16 +61,16 @@ router.post('/add', authenticateToken, async (req, res) => {
     isHumidity: req.body.isHum,
     isCO2: req.body.isCO2,
     temperatureRange: {
-      min: req.body.temperatureRange.min,
-      max: req.body.temperatureRange.max
+      min: req.body.temperatureRange.min || 0,
+      max: req.body.temperatureRange.max || 100
     },
     humidityRange: {
-      min: req.body.humidityRange.min,
-      max: req.body.humidityRange.max
+      min: req.body.humidityRange.min || 0,
+      max: req.body.humidityRange.max || 100
     },
     co2Range: {
-      min: req.body.co2Range.min,
-      max: req.body.co2Range.max
+      min: req.body.co2Range.min || 0,
+      max: req.body.co2Range.max || 100
     }
   })
   const reading = new Reading({
