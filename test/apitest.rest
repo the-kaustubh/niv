@@ -2,7 +2,7 @@
 http://localhost:3000
 -i
 Accept: */*
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImthdXN0dWJoIiwiaW5zdGl0dXRlIjoianNwbSIsImRlc2lnbmF0aW9uIjoiYWRtaW4iLCJpYXQiOjE2MjAzMDM3NjV9.YHyPBDi8rtAUwUg9HN9y8ke3aNkApfopJ1t9mOxkHIY
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImthdXN0dWJoIiwiaW5zdGl0dXRlIjoianNwbSIsImRlc2lnbmF0aW9uIjoiYWRtaW4iLCJpYXQiOjE2Mjg2NzEzMzN9.JIFCIyXnb6NO1cgeMpNK-aD2x3b_Jjmlk9OxSgnhIoc
 --
 
 --
@@ -90,3 +90,6 @@ GET /user/about
 
 --
 GET /node/getcsv/100001
+
+--
+GET /write/setpoints/10000
