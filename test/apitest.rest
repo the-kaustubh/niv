@@ -51,6 +51,13 @@ POST /node/add
   "uid": "100000",
   "location": "lab1",
   "machineName": "freezer",
+  "isTemp": true,
+  "isCO2": false,
+  "isHum": false,
+  "temperatureRange": {
+    "min": 40,
+    "max": 80
+  }
 }
 
 
@@ -92,4 +99,4 @@ GET /user/about
 GET /node/getcsv/100001
 
 --
-GET /write/setpoints/10000
+GET /write/setpoints/100000

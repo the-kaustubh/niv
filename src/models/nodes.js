@@ -40,24 +40,21 @@ const nodeSchema = new mongoose.Schema({
     default: {
       min: 0,
       max: 100
-    },
-    required: true
+    }
   },
   pressureRange: {
     type: RangeSchema,
     default: {
       min: 0,
       max: 100
-    },
-    required: true
+    }
   },
   temperatureRange: {
     type: RangeSchema,
     default: {
       min: 0,
       max: 100
-    },
-    required: true
+    }
   },
   humidityRange: {
     type: RangeSchema,

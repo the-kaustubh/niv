@@ -52,6 +52,8 @@ router.get('/readings/all/:uid', authenticateToken, async (req, res) => {
 
 router.post('/add', authenticateToken, async (req, res) => {
   req.body.user = req.user.username
+  console.log(req.body.temperatureRange.min + 1)
+  console.log(req.body.temperatureRange.max + 1)
   const node = new Node({
     uid: req.body.uid,
     location: req.body.location,
@@ -61,18 +63,19 @@ router.post('/add', authenticateToken, async (req, res) => {
     isHumidity: req.body.isHum,
     isCO2: req.body.isCO2,
     temperatureRange: {
-      min: req.body.temperatureRange.min || 0,
-      max: req.body.temperatureRange.max || 100
+      min: req.body?.temperatureRange?.min,
+      max: req.body?.temperatureRange?.max
     },
     humidityRange: {
-      min: req.body.humidityRange.min || 0,
-      max: req.body.humidityRange.max || 100
+      min: req.body?.humidityRange?.min,
+      max: req.body?.humidityRange?.max
     },
     co2Range: {
-      min: req.body.co2Range.min || 0,
-      max: req.body.co2Range.max || 100
+      min: req.body?.co2Range?.min,
+      max: req.body?.co2Range?.max
     }
   })
+  console.log({ node })
   const reading = new Reading({
     uid: req.body.uid,
     user: req.user.username
