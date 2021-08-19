@@ -37,6 +37,10 @@ app.use('/user', userRouter)
 const writeRouter = require('./routes/write')
 app.use('/write', writeRouter)
 
+app.get('/version', (_req, res) => {
+  res.json({ version: '0.0.2' })
+})
+
 app.get(/.*/, (_req, res) => {
   res.sendFile(path.resolve(__dirname, 'public', 'index.html'))
 })
