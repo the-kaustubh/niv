@@ -2,13 +2,15 @@ const express = require('express')
 const router = express.Router()
 const Node = require('../models/nodes')
 const Reading = require('../models/readings')
+const moment = require('moment')
 // const checkHealthNodes = require('../util/checkHealthNodes')
 // const reportMail = require('../util/reportMail')
 
 router.post('/reading', async (req, res) => {
   try {
     if (req.body.backup === '1') {
-      const dt = parseInt(req.body.datetime) * 1000
+      const dt = moment.unix(parseInt(req.body.datetime))
+      // const dt = parseInt(req.body.datetime) * 1000
       req.body.datetime = new Date(dt)
     }
 
