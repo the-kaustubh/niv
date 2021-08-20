@@ -9,7 +9,7 @@ const moment = require('moment')
 router.post('/reading', async (req, res) => {
   try {
     if (req.body.backup === '1') {
-      const dt = moment.unix(parseInt(req.body.datetime) ).utc()
+      const dt = moment.unix(parseInt(req.body.datetime) - 19800 ).utc()
       req.body.datetime = new Date(dt)
     }
 
