@@ -38,7 +38,7 @@ const writeRouter = require('./routes/write')
 app.use('/write', writeRouter)
 
 app.get('/version', (_req, res) => {
-  res.json({ version: '0.0.3' })
+  res.json({ version: '0.0.4' })
 })
 
 app.get(/.*/, (_req, res) => {
