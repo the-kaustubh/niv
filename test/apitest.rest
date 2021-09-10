@@ -1,5 +1,5 @@
-https://niv-backend.herokuapp.com
-# http://localhost:3000
+# https://niv-backend.herokuapp.com
+http://localhost:3000
 -i
 -s
 Accept: */*
@@ -68,9 +68,19 @@ DELETE /node/100000
 --
 POST /write/reading
 {
-  "uid": "100003",
-  "co2": "5.2",
-  "battery": "19",
+  "uid": "100001",
+  "temperature": "24",
+  "humidity": "12",
+  "battery": "20",
+  "user": "kaustubh"
+}
+
+--
+POST /write/reading
+{
+  "uid": "100001",
+  "co2": "5.1",
+  "battery": "20",
   "user": "kaustubh"
 }
 

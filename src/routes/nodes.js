@@ -170,4 +170,29 @@ router.get('/getcsv/:uid', async (req, res) => {
   }
 })
 
+router.get('/convert2csv', async (req, res) => {
+  try {
+    const uid = req.params.uid
+    const readingsDB = await Reading.find({ uid: uid })
+    const readingsToSend = []
+    for (let i = 0; i < readingsDB.length; i++) {
+      readingsToSend.push({
+        uid: readingsDB[i].uid,
+        user: readingsDB[i].user,
+        datetime: readingsDB[i].datetime,
+        pressure: readingsDB[i].pressure,
+        humidity: readingsDB[i].humidity,
+        co2: readingsDB[i].co2,
+        temperature: readingsDB[i].temperature
+      })
+    }
+
+    res.setHeader('Content-Type', 'text/csv')
+    res.setHeader('Content-Disposition', `attachment; filename="data.${uid}.csv"`)
+    await createCSV(readingsToSend, res)
+  } catch (err) {
+    res.json({ msg: err.message })
+  }
+})
+
 module.exports = router
