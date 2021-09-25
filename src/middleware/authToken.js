@@ -9,7 +9,7 @@ async function authenticateToken (req, res, next) {
   let usr
 
   try {
-    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
+    jwt.verify(token, process.env.ACCESS_TOKEN, (err, user) => {
       if (err) throw new Error('Invalid User')
       usr = user
     })

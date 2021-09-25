@@ -28,7 +28,7 @@ router.post('/register', async (req, res) => {
         institute: newUser.institute,
         designation: newUser.designation
       }
-      const accessToken = jwt.sign(data, process.env.ACCESS_TOKEN_SECRET)
+      const accessToken = jwt.sign(data, process.env.ACCESS_TOKEN)
       res.status(201).json(
         { accessToken: accessToken, designation: user.designation }
       )
@@ -52,7 +52,7 @@ router.post('/login', async (req, res) => {
         institute: user.institute,
         designation: user.designation
       }
-      const accessToken = jwt.sign(data, process.env.ACCESS_TOKEN_SECRET)
+      const accessToken = jwt.sign(data, process.env.ACCESS_TOKEN)
       res.status(201).json(
         { accessToken: accessToken, designation: user.designation }
       )

@@ -6,6 +6,7 @@ const mongoose = require('mongoose')
 const cors = require('cors')
 const path = require('path')
 const compression = require('compression')
+const initServer = require('./lib/InitServer')
 const nodeCron = require('node-cron')
 // const printAllFaultyNodes = require('./util/printAllFaultyNodes')
 
@@ -23,6 +24,11 @@ app.use(cors())
 app.use(compression())
 
 app.use(express.static(path.resolve(__dirname, 'public')))
+
+app.use((req, _res, next) => {
+  console.log(req.headers.host)
+  next()
+})
 
 const db = mongoose.connection
 db.on('error', (e) => console.log(e))
@@ -54,6 +60,6 @@ app.set('port', process.env.PORT || 3000)
 // })
 // task.start()
 
-app.listen(app.get('port'), () => console.log(`Server started @ http://localhost:${app.get('port')}`))
+app.listen(app.get('port'), initServer)
 
 module.exports = app
