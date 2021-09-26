@@ -24,7 +24,6 @@ const sendResetLink = async (user) => {
       ${process.env.HOST}:8080/passwordreset?token=${token}
       `
     })
-    console.log(info)
     return info
   } catch (e) {
     return null

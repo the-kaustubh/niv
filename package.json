@@ -13,11 +13,11 @@
   "author": "Kaustubh Murumkar",
   "license": "ISC",
   "devDependencies": {
-    "eslint": "^7.20.0",
-    "eslint-config-standard": "^16.0.2",
-    "eslint-plugin-import": "^2.22.1",
+    "eslint": "^7.32.0",
+    "eslint-config-standard": "^16.0.3",
+    "eslint-plugin-import": "^2.24.2",
     "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-promise": "^4.3.1",
+    "eslint-plugin-promise": "^5.1.0",
     "nodemon": "^2.0.7"
   },
   "dependencies": {
@@ -31,7 +31,9 @@
     "jsonwebtoken": "^8.5.1",
     "moment": "^2.29.1",
     "mongoose": "^5.11.15",
+    "morgan": "^1.10.0",
     "node-cron": "^3.0.0",
-    "nodemailer": "^6.6.1"
+    "nodemailer": "^6.6.1",
+    "telek": "^1.0.0"
   }
 }

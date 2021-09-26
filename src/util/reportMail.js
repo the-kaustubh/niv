@@ -12,7 +12,6 @@ const transporter = nodemailer.createTransport({
 })
 
 const reportMail = async (uid) => {
-  console.log(uid)
   const node = await Node.findOne({ uid: uid })
   const username = node.user
   const user = await User.findOne({ username: username })
@@ -26,7 +25,6 @@ const reportMail = async (uid) => {
       html:
       `Dear ${user.username}, please check your dashboard there may be some faulty nodes present`
     })
-    console.log(info)
     User.findOneAndUpdate({ username: user.user }, { mailSent: Date.now() })
   }
 }

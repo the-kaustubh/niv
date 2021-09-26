@@ -52,8 +52,6 @@ router.get('/readings/all/:uid', authenticateToken, async (req, res) => {
 
 router.post('/add', authenticateToken, async (req, res) => {
   req.body.user = req.user.username
-  console.log(req.body.temperatureRange.min + 1)
-  console.log(req.body.temperatureRange.max + 1)
   const node = new Node({
     uid: req.body.uid,
     location: req.body.location,
@@ -75,7 +73,6 @@ router.post('/add', authenticateToken, async (req, res) => {
       max: req.body?.co2Range?.max
     }
   })
-  console.log({ node })
   const reading = new Reading({
     uid: req.body.uid,
     user: req.user.username
@@ -91,7 +88,6 @@ router.post('/add', authenticateToken, async (req, res) => {
       reading: newReading
     })
   } catch (err) {
-    console.log('err: ' + err)
     res.status(400).json({ message: err.message })
   }
 })

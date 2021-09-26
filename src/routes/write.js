@@ -32,9 +32,7 @@ router.post('/reading', async (req, res) => {
 router.get('/setpoints/:uid', async (req, res) => {
   try {
     const UID = req.params.uid
-    console.log(UID)
     const node = await Node.findOne({ uid: UID })
-    console.log({ node })
 
     res.send({
       co2min: node?.co2Range?.min,
