@@ -55,6 +55,12 @@ app.set('port', process.env.PORT || 3000)
 // })
 // task.start()
 
-app.listen(app.get('port'), initServer)
+app.listen(app.get('port'), () => {
+  if (process.env.NODE_ENV === 'production') {
+    initServer()
+  } else {
+    console.log('server started')
+  }
+})
 
 module.exports = app
