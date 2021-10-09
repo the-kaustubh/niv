@@ -18,6 +18,7 @@ services:
       - HOST=http://localhost
       - NODE_ENV=development
       - PORT=3000
+      - MASTER_PWD=admin1234
   mongo-server:
     image: 'mongo'
   redis-server:

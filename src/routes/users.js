@@ -6,10 +6,11 @@ const Reading = require('../models/readings')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const authToken = require('../middleware/authToken')
+const checkMasterPassword = require('../middleware/checkMasterPassword')
 const privilegeLevels = require('../models/usersPrivilege')
 const { sendResetLink, verifyToken } = require('../util/reset')
 
-router.post('/register', async (req, res) => {
+router.post('/register', checkMasterPassword, async (req, res) => {
   try {
     const hashedPassword = await bcrypt.hash(req.body.password, 10)
     const privilege = privilegeLevels.indexOf(req.body.designation)

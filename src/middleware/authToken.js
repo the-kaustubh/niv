@@ -5,7 +5,7 @@ const User = require('../models/users')
 async function authenticateToken (req, res, next) {
   const authHeader = req.headers.authorization
   const token = authHeader && authHeader.split(' ')[1]
-  if (token == null) return res.sendStatus(401)
+  if (token == null) return res.json({ msg: 'Unauthorized' })
   let usr
 
   try {
@@ -19,13 +19,13 @@ async function authenticateToken (req, res, next) {
     })
 
     if (userPresent == null) {
-      return res.sendStatus(403)
+      return res.json({ msg: 'Unauthorized' })
     }
 
     req.user = userPresent
     next()
   } catch (e) {
-    res.status(403).json({ msg: e.message })
+    res.json({ msg: e.message })
   }
 }
 
