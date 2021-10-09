@@ -1,0 +1,24 @@
+version: '3'
+services:
+  node-app:
+    build: .
+    ports:
+      - "3000:3000"
+    depends_on:
+      - "redis-server"
+      - "mongo-server"
+    environment:
+      - REDIS_PORT=6379
+      - REDIS_HOST=redis-server
+      - DATABASE_URL=mongodb://mongo-server:27017/niv
+      - ACCESS_TOKEN=secretsecretsecret
+      - FROM_EMAIL=kaustubh.murumkar@gmail.com
+      - FROM_PWD=ywfrfjtrjfncdfmr
+      - EMAIL_TOK=secretsecretsecretsecretsecretsecret
+      - HOST=http://localhost
+      - NODE_ENV=development
+      - PORT=3000
+  mongo-server:
+    image: 'mongo'
+  redis-server:
+    image: 'redis'

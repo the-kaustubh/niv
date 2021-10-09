@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken')
-const nodemailer = require('nodemailer')
+const transporter = require('./nodemailerTransporter')
 
 const sendResetLink = async (user) => {
   try {
@@ -7,21 +7,16 @@ const sendResetLink = async (user) => {
       username: user.username,
       id: user._id
     }, process.env.EMAIL_TOK)
-    const transporter = nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-        user: process.env.FROM_EMAIL,
-        pass: process.env.FROM_PWD
-      }
-    })
 
     const info = await transporter.sendMail({
-      from: '"Kaustubh Murumkar " <kaustubh.murumkar@gmail.com>',
+      from: `"ATES OPL " <${process.env.FROM_EMAIL}>`,
       to: user.email,
       subject: ' Password Reset ',
       html: `<b> Hello ${user.username}</b>, you had requested for password reset <br>
       Here is your password reset link <br>
-      ${process.env.HOST}:8080/passwordreset?token=${token}
+      <a href="${process.env.HOST}:8080/passwordreset?token=${token}">Click Here</a>     
+
+      ATES OPL
       `
     })
     return info

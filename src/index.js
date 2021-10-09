@@ -7,6 +7,7 @@ const cors = require('cors')
 const path = require('path')
 const compression = require('compression')
 const initServer = require('./lib/InitServer')
+const redisClient = require('./cache')
 // const nodeCron = require('node-cron')
 // const printAllFaultyNodes = require('./util/printAllFaultyNodes')
 
@@ -28,6 +29,10 @@ app.use(express.static(path.resolve(__dirname, 'public')))
 const db = mongoose.connection
 db.on('error', (e) => console.log(e))
 db.once('open', () => console.log('Connected to Database'))
+
+redisClient.on('connect', () => {
+  console.log('Redis initialised')
+})
 
 const nodeRouter = require('./routes/nodes')
 app.use('/node', nodeRouter)

@@ -1,15 +1,8 @@
 const User = require('../models/users')
 const Node = require('../models/nodes')
-const nodemailer = require('nodemailer')
+const transporter = require('./nodemailerTransporter')
 
 const FiveHrs = 5 * 60 * 60 * 1000
-const transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: process.env.FROM_EMAIL,
-    pass: process.env.FROM_PWD
-  }
-})
 
 const reportMail = async (uid) => {
   const node = await Node.findOne({ uid: uid })
@@ -25,6 +18,7 @@ const reportMail = async (uid) => {
       html:
       `Dear ${user.username}, please check your dashboard there may be some faulty nodes present`
     })
+    console.log(info)
     User.findOneAndUpdate({ username: user.user }, { mailSent: Date.now() })
   }
 }
