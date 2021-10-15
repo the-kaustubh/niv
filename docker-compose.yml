@@ -10,6 +10,7 @@ services:
     environment:
       - REDIS_PORT=6379
       - REDIS_HOST=redis-server
+      - REDIS=yes
       - DATABASE_URL=mongodb://mongo-server:27017/niv
       - ACCESS_TOKEN=secretsecretsecret
       - FROM_EMAIL=kaustubh.murumkar@gmail.com
@@ -21,5 +22,7 @@ services:
       - MASTER_PWD=admin1234
   mongo-server:
     image: 'mongo'
+    volumes:
+      - ./data:/data/db
   redis-server:
     image: 'redis'
