@@ -9,6 +9,7 @@ const authToken = require('../middleware/authToken')
 const checkMasterPassword = require('../middleware/checkMasterPassword')
 const privilegeLevels = require('../models/usersPrivilege')
 const { sendResetLink, verifyToken } = require('../util/reset')
+const { actions, entities, logUpdates } = require('../util/logUpdates')
 
 router.post('/register', checkMasterPassword, async (req, res) => {
   try {
@@ -24,6 +25,7 @@ router.post('/register', checkMasterPassword, async (req, res) => {
     })
     const newUser = await user.save()
     if (newUser !== null) {
+      logUpdates(req.user, actions.CREATE, entities.USER, newUser.username, true)
       const data = {
         username: newUser.username,
         institute: newUser.institute,
@@ -53,6 +55,7 @@ router.post('/login', async (req, res) => {
         institute: user.institute,
         designation: user.designation
       }
+      logUpdates(user.username, actions.LOGIN, entities.USER, user.username, true)
       const accessToken = jwt.sign(data, process.env.ACCESS_TOKEN)
       res.status(201).json(
         { accessToken: accessToken, designation: user.designation }
@@ -126,6 +129,8 @@ router.post('/delete', authToken, async (req, res) => {
     }, err => {
       throw new Error(err.message)
     })
+    logUpdates(req.user.username, actions.DELETE, entities.USER, req.body.username, false)
+    res.json({ msg: 'Deleted' })
   } catch (e) {
     res.status(500).json({
       err: e.message

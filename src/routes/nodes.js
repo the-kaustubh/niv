@@ -7,6 +7,8 @@ const authenticateToken = require('../middleware/authToken')
 const getNode = require('../middleware/getNode')
 const createCSV = require('../util/createCSV')
 
+const { actions, entities, logUpdates } = require('../util/logUpdates')
+
 async function aggregatePipeline (filter) {
   const result = await Node.aggregate([
     { $match: filter },
@@ -139,6 +141,7 @@ router.post('/add', authenticateToken, async (req, res) => {
     }
     const newNode = await node.save()
     const newReading = await reading.save()
+    logUpdates(req.user.username, actions.CREATE, entities.NODE, newNode.uid, true)
     res.status(201).json({
       node: newNode,
       reading: newReading
@@ -154,6 +157,7 @@ router.post('/modify', authenticateToken, getNode, async (req, res) => {
 
   try {
     const newNode = await Node.findOneAndUpdate(conditions, update)
+    logUpdates(req.user.username, actions.UPDATE, entities.NODE, newNode.uid, true)
     res.status(201).json({ node: newNode })
   } catch (err) {
     res.status(404).json({ message: err.message })
@@ -189,6 +193,7 @@ router.delete('/:uid', authenticateToken, async (req, res) => {
         throw new Error(err.message)
       }
     })
+    logUpdates(req.user.username, actions.DELETE, entities.NODE, tbd.uid, true)
     res.status(200).json({
       message: 'Deleted Successfully'
     })
