@@ -78,8 +78,8 @@ POST /write/reading
 --
 POST /write/reading
 {
-  "uid": "100001",
-  "co2": "5.1",
+  "uid": "100002",
+  "temperature": "60.6",
   "battery": "20",
   "user": "kaustubh"
 }
@@ -111,3 +111,6 @@ GET /node/getcsv/100001
 
 --
 GET /write/setpoints/100000
+
+--
+GET /logs/

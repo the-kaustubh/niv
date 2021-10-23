@@ -20,6 +20,10 @@ const updatesSchema = new mongoose.Schema({
   status: {
     type: String,
     required: true
+  },
+  datetime: {
+    type: Date,
+    default: Date.now
   }
 })
 
