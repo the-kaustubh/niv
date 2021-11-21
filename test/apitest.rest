@@ -111,3 +111,6 @@ GET /node/getcsv/100001
 
 --
 GET /write/setpoints/100000
+
+--
+GET /user/allusers

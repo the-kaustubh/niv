@@ -7,6 +7,8 @@ const cors = require('cors')
 const path = require('path')
 const compression = require('compression')
 const initServer = require('./lib/InitServer')
+const setupMasterUser = require('./util/setupMasterUser')
+
 let redisClient
 if (process.env.REDIS === 'yes') {
   redisClient = require('./cache')
@@ -31,7 +33,13 @@ app.use(express.static(path.resolve(__dirname, 'public')))
 
 const db = mongoose.connection
 db.on('error', (e) => console.log(e))
-db.once('open', () => console.log('Connected to Database'))
+db.once('open', async () => {
+  console.log('Connected to Database')
+  const status = await setupMasterUser()
+  if (status !== null) {
+    throw status
+  }
+})
 
 if (process.env.REDIS === 'yes') {
   redisClient.on('connect', () => {

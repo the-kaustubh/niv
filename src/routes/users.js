@@ -6,12 +6,11 @@ const Reading = require('../models/readings')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const authToken = require('../middleware/authToken')
-const checkMasterPassword = require('../middleware/checkMasterPassword')
 const privilegeLevels = require('../models/usersPrivilege')
 const { sendResetLink, verifyToken } = require('../util/reset')
 const { actions, entities, logUpdates } = require('../util/logUpdates')
 
-router.post('/register', checkMasterPassword, async (req, res) => {
+router.post('/register', authToken, async (req, res) => {
   try {
     const hashedPassword = await bcrypt.hash(req.body.password, 10)
     const privilege = privilegeLevels.indexOf(req.body.designation)
@@ -19,13 +18,14 @@ router.post('/register', checkMasterPassword, async (req, res) => {
       username: req.body.username,
       password: hashedPassword,
       email: req.body.email,
+      createdBy: req.user._id,
       institute: req.body.institute,
       designation: req.body.designation,
       privilege: privilege
     })
     const newUser = await user.save()
     if (newUser !== null) {
-      logUpdates(req.user, actions.CREATE, entities.USER, newUser.username, true)
+      logUpdates(req.user.username, actions.CREATE, entities.USER, newUser.username, true)
       const data = {
         username: newUser.username,
         institute: newUser.institute,
@@ -38,6 +38,16 @@ router.post('/register', checkMasterPassword, async (req, res) => {
     }
   } catch (err) {
     res.status(400).json({ message: err.message })
+  }
+})
+
+router.get('/allusers', authToken, async (req, res) => {
+  try {
+    let users
+    users = await User.find({ createdBy: req.user._id })
+    res.json(users)
+  } catch (err) {
+    res.status(500).json({ message: err.message })
   }
 })
 
