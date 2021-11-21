@@ -61,7 +61,7 @@ async function aggregatePipeline (filter) {
       }
 
     }
-  ])
+  ]).allowDiskUse(true)
   return result
 }
 
