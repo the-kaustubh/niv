@@ -116,29 +116,25 @@ router.post('/resetpwd', async (req, res) => {
   }
 })
 
-router.post('/delete', authToken, async (req, res) => {
+router.delete('/delete', authToken, async (req, res) => {
   try {
-    if (req.user.privilege < req.body.privilege) {
+    if (req.user.privilege > req.body.privilege) {
       throw new Error(`Cannot delete user ${req.body.user}`)
     }
 
-    User.deleteOne({
-      username: req.body.username
-    }, err => {
-      throw new Error(err.message)
-    })
+    await User.deleteOne({ username: req.body.username })
 
-    Node.deleteMany({
-      user: req.body.username
-    }, err => {
-      throw new Error(err.message)
-    })
+    // Node.deleteMany({
+    //   user: req.body.username
+    // }, err => {
+    //   throw new Error(err.message)
+    // })
 
-    Reading.deleteMany({
-      user: req.body.username
-    }, err => {
-      throw new Error(err.message)
-    })
+    // Reading.deleteMany({
+    //   user: req.body.username
+    // }, err => {
+    //   throw new Error(err.message)
+    // })
     logUpdates(req.user.username, actions.DELETE, entities.USER, req.body.username, false)
     res.json({ msg: 'Deleted' })
   } catch (e) {

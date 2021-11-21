@@ -35,8 +35,8 @@ POST /user/register
 --
 POST /user/login
 {
-  "username": "sbmohite",
-  "password": "admin"
+  "username": "master",
+  "password": "admin1234"
 }
 
 --
@@ -78,7 +78,7 @@ POST /write/reading
 --
 POST /write/reading
 {
-  "uid": "100002",
+  "uid": "100001",
   "temperature": "60.6",
   "battery": "20",
   "user": "kaustubh"
@@ -87,7 +87,7 @@ POST /write/reading
 --
 POST /write/reading
 {
-  "uid": "100003",
+  "uid": "100001",
   "temperature": "60.6",
   "humidity": "69",
   "co2": "69.0",

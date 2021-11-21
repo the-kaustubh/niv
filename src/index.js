@@ -9,10 +9,6 @@ const compression = require('compression')
 const initServer = require('./lib/InitServer')
 const setupMasterUser = require('./util/setupMasterUser')
 
-let redisClient
-if (process.env.REDIS === 'yes') {
-  redisClient = require('./cache')
-}
 // let redisClient
 // if (process.env.REDIS === 'yes') {
 //   redisClient = require('./cache')
@@ -45,7 +41,9 @@ db.once('open', async () => {
   }
 })
 
+let redisClient
 if (process.env.REDIS === 'yes') {
+  redisClient = require('./cache')
   redisClient.on('connect', () => {
     console.log('Redis initialised')
   })

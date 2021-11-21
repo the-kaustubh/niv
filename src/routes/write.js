@@ -9,13 +9,24 @@ const moment = require('moment')
 router.post('/reading', async (req, res) => {
   try {
     if (req.body.backup === '1') {
-      const dt = moment.unix(parseInt(req.body.datetime) - 19800 ).utc()
+      const dt = moment.unix(parseInt(req.body.datetime) - 19800).utc()
       req.body.datetime = new Date(dt)
     }
 
     const reading = new Reading(req.body)
     const savedReading = await reading.save()
+    const newId = savedReading._id
+
     if (savedReading == null) {
+      throw new Error('Could not save.')
+    }
+
+    const updatedNode = await Node.findOneAndUpdate(
+      { uid: req.body.uid },
+      { reading: newId }
+    )
+
+    if (updatedNode == null) {
       throw new Error('Could not save.')
     }
 

@@ -9,69 +9,70 @@ const createCSV = require('../util/createCSV')
 
 const { actions, entities, logUpdates } = require('../util/logUpdates')
 
-async function aggregatePipeline (filter) {
-  const result = await Node.aggregate([
-    { $match: filter },
-    {
-      $lookup: {
-        from: 'readings',
-        localField: 'uid',
-        foreignField: 'uid',
-        as: 'readings'
-      }
-    },
-    { $unwind: '$readings' },
-    { $sort: { 'readings.datetime': -1 } },
-    {
-      $group: {
-        _id: '$_id',
-        uid: { $first: '$uid' },
-        location: { $first: '$location' },
-        machineName: { $first: '$machineName' },
-        readings: { $push: '$readings' },
-        isTemperature: { $first: '$isTemperature' },
-        isHumidity: { $first: '$isHumidity' },
-        isCO2: { $first: '$isCO2' },
-        co2Range: { $first: '$co2Range' },
-        temperatureRange: { $first: '$temperatureRange' },
-        humidityRange: { $first: '$humidityRange' }
-      }
-    },
-    {
-      $project: {
-        _id: 0,
-        readings: { $arrayElemAt: ['$readings', 0] },
-        uid: 1,
-        location: 1,
-        machineName: 1,
-        isTemperature: 1,
-        isHumidity: 1,
-        isCO2: 1,
-        co2Range: { min: 1, max: 1 },
-        temperatureRange: { min: 1, max: 1 },
-        humidityRange: { min: 1, max: 1 }
-      }
-    },
-    {
-      $project: {
-        readings: {
-          _id: 0,
-          __v: 0
-        }
-      }
-
-    }
-  ]).allowDiskUse(true)
-  return result
-}
+// async function aggregatePipeline (filter) {
+//   const result = await Node.aggregate([
+//     { $match: filter },
+//     {
+//       $lookup: {
+//         from: 'readings',
+//         localField: 'uid',
+//         foreignField: 'uid',
+//         as: 'readings'
+//       }
+//     },
+//     { $unwind: '$readings' },
+//     { $sort: { 'readings.datetime': -1 } },
+//     {
+//       $group: {
+//         _id: '$_id',
+//         uid: { $first: '$uid' },
+//         location: { $first: '$location' },
+//         machineName: { $first: '$machineName' },
+//         readings: { $push: '$readings' },
+//         isTemperature: { $first: '$isTemperature' },
+//         isHumidity: { $first: '$isHumidity' },
+//         isCO2: { $first: '$isCO2' },
+//         co2Range: { $first: '$co2Range' },
+//         temperatureRange: { $first: '$temperatureRange' },
+//         humidityRange: { $first: '$humidityRange' }
+//       }
+//     },
+//     {
+//       $project: {
+//         _id: 0,
+//         readings: { $arrayElemAt: ['$readings', 0] },
+//         uid: 1,
+//         location: 1,
+//         machineName: 1,
+//         isTemperature: 1,
+//         isHumidity: 1,
+//         isCO2: 1,
+//         co2Range: { min: 1, max: 1 },
+//         temperatureRange: { min: 1, max: 1 },
+//         humidityRange: { min: 1, max: 1 }
+//       }
+//     },
+//     {
+//       $project: {
+//         readings: {
+//           _id: 0,
+//           __v: 0
+//         }
+//       }
+//     }
+//   ]).allowDiskUse(true)
+//   return result
+// }
 
 router.get('/', authenticateToken, async (req, res) => {
   try {
     let nodes
     if (req.user.privilege === 1 || req.user.privilege === 3) {
-      nodes = await aggregatePipeline({ location: req.user.institute })
+      nodes = await Node.find({ location: req.user.institute }).populate('reading').exec()
+      // nodes = await aggregatePipeline({ location: req.user.institute })
     } else {
-      nodes = await aggregatePipeline({ user: req.user.username })
+      nodes = await Node.find({ user: req.user.username }).populate('reading').exec()
+      // nodes = await aggregatePipeline({ user: req.user.username })
     }
     res.json(nodes)
   } catch (err) {
@@ -110,6 +111,10 @@ router.get('/readings/all/:uid', authenticateToken, async (req, res) => {
 
 router.post('/add', authenticateToken, async (req, res) => {
   req.body.user = req.user.username
+  const reading = new Reading({
+    uid: req.body.uid,
+    user: req.user.username
+  })
   const node = new Node({
     uid: req.body.uid,
     location: req.body.location,
@@ -118,6 +123,7 @@ router.post('/add', authenticateToken, async (req, res) => {
     isTemperature: req.body.isTemp,
     isHumidity: req.body.isHum,
     isCO2: req.body.isCO2,
+    reading: reading._id,
     temperatureRange: {
       min: req.body?.temperatureRange?.min,
       max: req.body?.temperatureRange?.max
@@ -130,10 +136,6 @@ router.post('/add', authenticateToken, async (req, res) => {
       min: req.body?.co2Range?.min,
       max: req.body?.co2Range?.max
     }
-  })
-  const reading = new Reading({
-    uid: req.body.uid,
-    user: req.user.username
   })
   try {
     if (req.user.privilege > 2) {

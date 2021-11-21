@@ -23,6 +23,10 @@ const nodeSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  reading: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'reading'
+  },
   isTemperature: {
     type: Boolean,
     required: true

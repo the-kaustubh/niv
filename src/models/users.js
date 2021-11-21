@@ -23,7 +23,8 @@ const userSchema = new mongoose.Schema({
     required: true
   },
   createdBy: {
-    type: mongoose.Schema.Types.ObjectId
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'user'
   },
   password: {
     type: String,
