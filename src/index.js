@@ -9,13 +9,6 @@ const compression = require('compression')
 const initServer = require('./lib/InitServer')
 const setupMasterUser = require('./util/setupMasterUser')
 
-// let redisClient
-// if (process.env.REDIS === 'yes') {
-//   redisClient = require('./cache')
-// }
-// const nodeCron = require('node-cron')
-// const printAllFaultyNodes = require('./util/printAllFaultyNodes')
-
 mongoose.connect(
   process.env.DATABASE_URL,
   {
@@ -41,14 +34,6 @@ db.once('open', async () => {
   }
 })
 
-let redisClient
-if (process.env.REDIS === 'yes') {
-  redisClient = require('./cache')
-  redisClient.on('connect', () => {
-    console.log('Redis initialised')
-  })
-}
-
 const nodeRouter = require('./routes/nodes')
 app.use('/node', nodeRouter)
 
@@ -71,18 +56,11 @@ app.get(/.*/, (_req, res) => {
 
 app.set('port', process.env.PORT || 3000)
 
-// Adding cron jobs
-// const cronstring = (process.env.NODE_ENV === 'production') ? '* */5 * * *' : '*/10 * * * * *'
-// const task = nodeCron.schedule(cronstring, () => {
-//   // printAllFaultyNodes()
-// })
-// task.start()
-
 app.listen(app.get('port'), () => {
   if (process.env.NODE_ENV === 'production') {
     initServer()
   } else {
-    console.log('server started')
+    console.log('Server started')
   }
 })
 
