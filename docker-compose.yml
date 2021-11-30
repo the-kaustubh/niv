@@ -17,6 +17,7 @@ services:
       - FROM_PWD=ywfrfjtrjfncdfmr
       - EMAIL_TOK=secretsecretsecretsecretsecretsecret
       - HOST=http://localhost
+      - INSTITUTE=ates
       - NODE_ENV=development
       - PORT=3000
       - MASTER_PWD=admin1234
