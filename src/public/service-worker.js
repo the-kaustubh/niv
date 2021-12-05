@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/precache-manifest.fc32473541011f820e0e58ab726ce213.js"
+  "/precache-manifest.7ae66d64decab2fdad3547a7206da23c.js"
 );
 
 workbox.core.setCacheNameDetails({prefix: "monitoring_system"});
