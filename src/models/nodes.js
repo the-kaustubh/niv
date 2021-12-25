@@ -19,6 +19,10 @@ const nodeSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  sublocation: {
+    type: String,
+    required: true
+  },
   machineName: {
     type: String,
     required: true
