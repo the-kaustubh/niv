@@ -61,7 +61,7 @@ app.listen(app.get('port'), () => {
   if (process.env.NODE_ENV === 'production') {
     initServer()
   }
-  logger.info('Server started')
+  logger.info(`Server started in ${process.env.NODE_ENV} mode`)
 })
 
 module.exports = app
