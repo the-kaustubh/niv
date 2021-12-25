@@ -67,12 +67,20 @@ const { actions, entities, logUpdates } = require('../util/logUpdates')
 router.get('/', authenticateToken, async (req, res) => {
   try {
     let nodes
-    if (req.user.privilege === 1 || req.user.privilege === 3) {
-      nodes = await Node.find({ location: req.user.institute }).populate('reading').exec()
-      // nodes = await aggregatePipeline({ location: req.user.institute })
-    } else {
-      nodes = await Node.find({ user: req.user.username }).populate('reading').exec()
-      // nodes = await aggregatePipeline({ user: req.user.username })
+    switch (req.user.privilege) {
+      case 0:
+      case 1:
+      case 3:
+        nodes = await Node.find({}).populate('reading').exec()
+        break
+      case 2:
+        nodes = await Node.find({ user: req.user.username }).populate('reading').exec()
+        break
+      case 4:
+        nodes = await Node.find({ user: req.user.createdBy.username }).populate('reading').exec()
+        break
+      default:
+        throw new Error('Invalid user')
     }
     res.json(nodes)
   } catch (err) {
@@ -118,6 +126,7 @@ router.post('/add', authenticateToken, async (req, res) => {
   const node = new Node({
     uid: req.body.uid,
     location: req.body.location,
+    sublocation: req.body.sublocation,
     machineName: req.body.machineName,
     user: req.user.username,
     isTemperature: req.body.isTemp,
