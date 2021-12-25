@@ -28,7 +28,7 @@ app.use(express.static(path.resolve(__dirname, 'public')))
 const db = mongoose.connection
 db.on('error', (e) => logger.error(e))
 db.once('open', async () => {
-  logger.log('error', 'Connected to Database')
+  logger.log('info', 'Connected to Database')
   const status = await setupMasterUser()
   if (status !== null) {
     throw status
@@ -61,7 +61,7 @@ app.listen(app.get('port'), () => {
   if (process.env.NODE_ENV === 'production') {
     initServer()
   }
-  logger.error('Server started')
+  logger.info('Server started')
 })
 
 module.exports = app

@@ -20,11 +20,11 @@ async function setupMasterUser () {
       })
       const saved = await master.save()
       if (saved !== null) {
-        logger.error('Created Master user')
+        logger.info('Created Master user')
         return null
       }
     } else {
-      logger.error('Master exists')
+      logger.info('Master exists')
       return null
     }
   } catch (err) {

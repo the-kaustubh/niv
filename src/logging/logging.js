@@ -1,5 +1,7 @@
 const { createLogger, format, transports } = require('winston')
 
+const logPath = (process.env.LOGPATH) ? `${process.env.LOGPATH}/` : ''
+
 const logger = createLogger({
   level: 'info',
   format: format.combine(
@@ -12,8 +14,8 @@ const logger = createLogger({
   ),
   defaultMeta: { service: 'niv-ates' },
   transports: [
-    new transports.File({ filename: 'ates_niv.error.log', level: 'error' }),
-    new transports.File({ filename: 'ates_niv.com.log' })
+    new transports.File({ filename: `${logPath}ates_niv.error.log`, level: 'error' }),
+    new transports.File({ filename: `${logPath}ates_niv.com.log` })
   ]
 })
 
