@@ -8,6 +8,7 @@ async function getNode (req, res, next) {
       return res.status(404).json({ message: 'Cannot Find Node' })
     }
   } catch (err) {
+    console.err(err)
     return res.status(404).json({ message: err.message })
   }
   req.node = node[0]

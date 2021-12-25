@@ -1,5 +1,6 @@
 const User = require('../models/users')
 const bcrypt = require('bcrypt')
+const logger = require('../logging/logging')
 
 async function setupMasterUser () {
   try {
@@ -19,14 +20,15 @@ async function setupMasterUser () {
       })
       const saved = await master.save()
       if (saved !== null) {
-        console.log('Created Master user')
+        logger.error('Created Master user')
         return null
       }
     } else {
-      console.log("Master exists")
+      logger.error('Master exists')
       return null
     }
   } catch (err) {
+    console.err(err)
     return err
   }
 }

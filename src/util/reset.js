@@ -20,7 +20,8 @@ const sendResetLink = async (user) => {
       `
     })
     return info
-  } catch (e) {
+  } catch (err) {
+    console.err(err)
     return null
   }
 }

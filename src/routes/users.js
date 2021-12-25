@@ -1,8 +1,6 @@
 const express = require('express')
 const router = express.Router()
 const User = require('../models/users')
-const Node = require('../models/nodes')
-const Reading = require('../models/readings')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const authToken = require('../middleware/authToken')
@@ -37,6 +35,7 @@ router.post('/register', authToken, async (req, res) => {
       )
     }
   } catch (err) {
+    console.err(err)
     res.status(400).json({ message: err.message })
   }
 })
@@ -47,6 +46,7 @@ router.get('/allusers', authToken, async (req, res) => {
     users = await User.find({ createdBy: req.user._id })
     res.json(users)
   } catch (err) {
+    console.err(err)
     res.status(500).json({ message: err.message })
   }
 })
@@ -74,6 +74,7 @@ router.post('/login', async (req, res) => {
       res.status(403).json({ message: 'Incorrect Username or Password' })
     }
   } catch (err) {
+    console.err(err)
     res.status(500).json({ message: err.message })
   }
 })
@@ -93,6 +94,7 @@ router.post('/forgot', async (req, res) => {
       throw new Error('Could not send mail')
     }
   } catch (e) {
+    console.err(err)
     res.json({ msg: e.message })
   }
 })
@@ -112,6 +114,7 @@ router.post('/resetpwd', async (req, res) => {
       newUser
     })
   } catch (e) {
+    console.err(err)
     res.json({ msg: e.message })
   }
 })
@@ -137,9 +140,10 @@ router.delete('/delete', authToken, async (req, res) => {
     // })
     logUpdates(req.user.username, actions.DELETE, entities.USER, req.body.username, false)
     res.json({ msg: 'Deleted' })
-  } catch (e) {
+  } catch (err) {
+    console.err(err)
     res.status(500).json({
-      err: e.message
+      err: err.message
     })
   }
 })

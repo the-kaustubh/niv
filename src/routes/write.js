@@ -36,6 +36,7 @@ router.post('/reading', async (req, res) => {
       }
     )
   } catch (err) {
+    console.err(err)
     res.status(500).json({ msg: err.message })
   }
 })
@@ -56,6 +57,7 @@ router.get('/setpoints/:uid', async (req, res) => {
       humiditymax: node?.humidityRange?.max
     })
   } catch (err) {
+    console.err(err)
     res.send({ err: err.message })
   }
 })

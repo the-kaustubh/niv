@@ -18,7 +18,7 @@ const reportMail = async (uid) => {
       html:
       `Dear ${user.username}, please check your dashboard there may be some faulty nodes present`
     })
-    console.log(info)
+    logger.error(info)
     User.findOneAndUpdate({ username: user.user }, { mailSent: Date.now() })
   }
 }

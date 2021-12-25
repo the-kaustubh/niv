@@ -8,6 +8,7 @@ const path = require('path')
 const compression = require('compression')
 const initServer = require('./lib/InitServer')
 const setupMasterUser = require('./util/setupMasterUser')
+const logger = require('./logging/logging')
 
 mongoose.connect(
   process.env.DATABASE_URL,
@@ -25,9 +26,9 @@ app.use(compression())
 app.use(express.static(path.resolve(__dirname, 'public')))
 
 const db = mongoose.connection
-db.on('error', (e) => console.log(e))
+db.on('error', (e) => logger.error(e))
 db.once('open', async () => {
-  console.log('Connected to Database')
+  logger.log('error', 'Connected to Database')
   const status = await setupMasterUser()
   if (status !== null) {
     throw status
@@ -59,9 +60,8 @@ app.set('port', process.env.PORT || 3000)
 app.listen(app.get('port'), () => {
   if (process.env.NODE_ENV === 'production') {
     initServer()
-  } else {
-    console.log('Server started')
   }
+  logger.error('Server started')
 })
 
 module.exports = app

@@ -84,6 +84,7 @@ router.get('/', authenticateToken, async (req, res) => {
     }
     res.json(nodes)
   } catch (err) {
+    console.err(err)
     res.json({ message: err.message })
   }
 })
@@ -100,6 +101,7 @@ router.get('/readings/:uid', authenticateToken, async (req, res) => {
     delete readings[0].__v
     res.status(200).json(readings[0])
   } catch (err) {
+    console.err(err)
     res.status(500).json({ message: err.message })
   }
 })
@@ -113,6 +115,7 @@ router.get('/readings/all/:uid', authenticateToken, async (req, res) => {
     }).sort()
     res.status(200).json(readings)
   } catch (err) {
+    console.err(err)
     res.status(500).json({ message: err.message })
   }
 })
@@ -158,6 +161,7 @@ router.post('/add', authenticateToken, async (req, res) => {
       reading: newReading
     })
   } catch (err) {
+    console.err(err)
     res.status(400).json({ message: err.message })
   }
 })
@@ -171,6 +175,7 @@ router.post('/modify', authenticateToken, getNode, async (req, res) => {
     logUpdates(req.user.username, actions.UPDATE, entities.NODE, newNode.uid, true)
     res.status(201).json({ node: newNode })
   } catch (err) {
+    console.err(err)
     res.status(404).json({ message: err.message })
   }
 })
@@ -209,6 +214,7 @@ router.delete('/:uid', authenticateToken, async (req, res) => {
       message: 'Deleted Successfully'
     })
   } catch (err) {
+    console.err(err)
     res.status(503).json({ message: err.message })
   }
 })
@@ -234,6 +240,7 @@ router.get('/getcsv/:uid', async (req, res) => {
     res.setHeader('Content-Disposition', `attachment; filename="data.${uid}.csv"`)
     await createCSV(readingsToSend, res)
   } catch (err) {
+    console.err(err)
     res.json({ msg: err.message })
   }
 })
@@ -259,6 +266,7 @@ router.get('/convert2csv', async (req, res) => {
     res.setHeader('Content-Disposition', `attachment; filename="data.${uid}.csv"`)
     await createCSV(readingsToSend, res)
   } catch (err) {
+    console.err(err)
     res.json({ msg: err.message })
   }
 })

@@ -29,6 +29,7 @@ async function logUpdates (user, action, entity, entityId, status) {
     const updated = await updates.save()
     return updated
   } catch (e) {
+    console.err(e)
     return e
   }
 }
