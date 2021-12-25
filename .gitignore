@@ -2,6 +2,10 @@ node_modules/
 niv-linux
 niv-win.exe
 data/
+*.log
+.log
+package-lock.json
+yarn.lock
 
 # Elastic Beanstalk Files
 .elasticbeanstalk/*
