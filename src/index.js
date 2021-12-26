@@ -9,6 +9,8 @@ const compression = require('compression')
 const initServer = require('./lib/InitServer')
 const setupMasterUser = require('./util/setupMasterUser')
 const logger = require('./logging/logging')
+const { createBackup } = require('./util/dbBackup')
+const { registerCRON } = require('./util/cronJob')
 
 mongoose.connect(
   process.env.DATABASE_URL,
@@ -54,6 +56,8 @@ app.get('/version', (_req, res) => {
 app.get(/.*/, (_req, res) => {
   res.sendFile(path.resolve(__dirname, 'public', 'index.html'))
 })
+
+registerCRON('*/10 * * * * *', 'Backup_5m', createBackup)
 
 app.set('port', process.env.PORT || 3000)
 
