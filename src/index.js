@@ -57,7 +57,7 @@ app.get(/.*/, (_req, res) => {
   res.sendFile(path.resolve(__dirname, 'public', 'index.html'))
 })
 
-registerCRON('*/10 * * * * *', 'Backup_5m', createBackup)
+registerCRON('0 0 * * *', 'daily_backup', createBackup)
 
 app.set('port', process.env.PORT || 3000)
 
