@@ -9,6 +9,8 @@ const createCSV = require('../util/createCSV')
 
 const { actions, entities, logUpdates } = require('../util/logUpdates')
 
+const TIMEZONE_OFFSET = 19800000
+
 // async function aggregatePipeline (filter) {
 //   const result = await Node.aggregate([
 //     { $match: filter },
