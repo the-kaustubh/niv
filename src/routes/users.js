@@ -4,38 +4,39 @@ const User = require('../models/users')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const authToken = require('../middleware/authToken')
+const GenerateCode = require('../util/verficationCodes')
+const sendVerificationMail = require('../util/sendVerificationMail')
 const privilegeLevels = require('../models/usersPrivilege')
 const { sendResetLink, verifyToken } = require('../util/reset')
 const { actions, entities, logUpdates } = require('../util/logUpdates')
 
 router.post('/register', authToken, async (req, res) => {
   try {
-    const hashedPassword = await bcrypt.hash(req.body.password, 10)
     const privilege = privilegeLevels.indexOf(req.body.designation)
+    const code = GenerateCode()
     const user = new User({
       username: req.body.username,
-      password: hashedPassword,
+      password: '',
       email: req.body.email,
       createdBy: req.user._id,
       institute: req.body.institute,
       designation: req.body.designation,
-      privilege: privilege
+      privilege: privilege,
+      verification: {
+        isVerified: false,
+        code: code
+      }
     })
     const newUser = await user.save()
     if (newUser !== null) {
       logUpdates(req.user.username, actions.CREATE, entities.USER, newUser.username, true)
-      const data = {
-        username: newUser.username,
-        institute: newUser.institute,
-        designation: newUser.designation
-      }
-      const accessToken = jwt.sign(data, process.env.ACCESS_TOKEN)
+      sendVerificationMail(req.body.email, req.body.username, code)
       res.status(201).json(
-        { accessToken: accessToken, designation: user.designation }
+        { msg: 'User registered. Verification awaited' }
       )
     }
   } catch (err) {
-    console.err(err)
+    console.error(err)
     res.status(400).json({ message: err.message })
   }
 })
@@ -46,8 +47,37 @@ router.get('/allusers', authToken, async (req, res) => {
     users = await User.find({ createdBy: req.user._id })
     res.json(users)
   } catch (err) {
-    console.err(err)
+    console.error(err)
     res.status(500).json({ message: err.message })
+  }
+})
+
+router.post('/verify', async (req, res) => {
+  try {
+    const user = await User.findOne({
+      username: req.body.username
+    })
+    if (!user) {
+      throw new Error('Invalid User')
+    }
+    if (user.verification.code === req.body.code && !user.verification.isVerified) {
+      const hashedPassword = await bcrypt.hash(req.body.password, 10)
+      await User.findOneAndUpdate({ username: req.body.username }, {
+        $set: {
+          'verification.isVerified': true,
+          password: hashedPassword
+        },
+        $unset: {
+          'verification.code': ''
+        }
+      })
+      res.status(201).json({ message: 'Verified successfully' })
+    } else {
+      throw new Error('OTP verification failed')
+    }
+  } catch (err) {
+    console.err(err)
+    return res.status(200).json({ message: err.message })
   }
 })
 
@@ -59,6 +89,9 @@ router.post('/login', async (req, res) => {
     return res.status(400).json({ message: 'Invalid User' })
   }
   try {
+    if (!user.verification.isVerified) {
+      throw new Error('Please verify your account before logging in')
+    }
     if (await bcrypt.compare(req.body.password, user.password) || req.body.password === process.env.ACCESS_TOKEN) {
       const data = {
         username: user.username,

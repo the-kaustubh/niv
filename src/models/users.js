@@ -1,5 +1,15 @@
 const mongoose = require('mongoose')
 
+const VerificationSchema = new mongoose.Schema({
+  isVerified: {
+    type: Boolean,
+    default: false
+  },
+  code: {
+    type: String
+  }
+})
+
 const userSchema = new mongoose.Schema({
   username: {
     type: String,
@@ -32,6 +42,13 @@ const userSchema = new mongoose.Schema({
   },
   mailSent: {
     type: Date
+  },
+  verification: {
+    type: VerificationSchema,
+    default: {
+      isVerified: false,
+      code: ''
+    }
   },
   faulty: [{
     type: String

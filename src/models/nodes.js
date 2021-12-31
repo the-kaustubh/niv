@@ -72,6 +72,10 @@ const nodeSchema = new mongoose.Schema({
     },
     required: true
   },
+  isArchived: {
+    type: Boolean,
+    default: false
+  },
   user: {
     type: String,
     required: true

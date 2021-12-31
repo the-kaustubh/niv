@@ -16,6 +16,9 @@ async function setupMasterUser () {
         email: process.env.FROM_EMAIL,
         institute: process.env.INSTITUTE,
         designation: 'superadmin',
+        verification: {
+          isVerified: true
+        },
         privilege: 0
       })
       const saved = await master.save()

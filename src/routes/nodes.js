@@ -71,20 +71,20 @@ router.get('/', authenticateToken, async (req, res) => {
       case 0:
       case 1:
       case 3:
-        nodes = await Node.find({}).populate('reading').exec()
+        nodes = await Node.find({ isArchived: false }).populate('reading').exec()
         break
       case 2:
-        nodes = await Node.find({ user: req.user.username }).populate('reading').exec()
+        nodes = await Node.find({ user: req.user.username, isArchived: false }).populate('reading').exec()
         break
       case 4:
-        nodes = await Node.find({ user: req.user.createdBy.username }).populate('reading').exec()
+        nodes = await Node.find({ user: req.user.createdBy.username, isArchived: false }).populate('reading').exec()
         break
       default:
         throw new Error('Invalid user')
     }
     res.json(nodes)
   } catch (err) {
-    console.err(err)
+    console.error(err)
     res.json({ message: err.message })
   }
 })
@@ -101,21 +101,46 @@ router.get('/readings/:uid', authenticateToken, async (req, res) => {
     delete readings[0].__v
     res.status(200).json(readings[0])
   } catch (err) {
-    console.err(err)
+    console.error(err)
     res.status(500).json({ message: err.message })
   }
 })
 
-router.get('/readings/all/:uid', authenticateToken, async (req, res) => {
-  const UID = req.params.uid
+router.post('/readings/all/', authenticateToken, async (req, res) => {
+  const UID = req.body.uid
+  const from = new Date(Date.parse(req.body.from) - TIMEZONE_OFFSET)
+  const to = new Date(Date.parse(req.body.to) - TIMEZONE_OFFSET)
   let readings
   try {
     readings = await Reading.find({
-      uid: UID
+      $and: [
+        { uid: UID },
+        {
+
+          datetime: {
+            $gte: from,
+            $lte: to
+          }
+        }
+
+      ]
     }).sort()
     res.status(200).json(readings)
   } catch (err) {
-    console.err(err)
+    console.error(err)
+    res.status(500).json({ message: err.message })
+  }
+})
+
+router.get('/archived', authenticateToken, async (_req, res) => {
+  let nodes
+  try {
+    nodes = await Node.find({
+      isArchived: true
+    }).sort()
+    res.status(200).json(nodes)
+  } catch (err) {
+    console.error(err)
     res.status(500).json({ message: err.message })
   }
 })
