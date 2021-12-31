@@ -36,5 +36,6 @@ function overrideConsole (level) {
 console.info = overrideConsole('info')
 console.log = overrideConsole('info')
 console.error = overrideConsole('error')
+console.err = console.error
 
 module.exports = logger

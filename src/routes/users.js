@@ -74,7 +74,7 @@ router.post('/login', async (req, res) => {
       res.status(403).json({ message: 'Incorrect Username or Password' })
     }
   } catch (err) {
-    console.err(err)
+    console.error(err)
     res.status(500).json({ message: err.message })
   }
 })
@@ -93,9 +93,9 @@ router.post('/forgot', async (req, res) => {
     } else {
       throw new Error('Could not send mail')
     }
-  } catch (e) {
-    console.err(err)
-    res.json({ msg: e.message })
+  } catch (err) {
+    console.error(err)
+    res.json({ msg: err.message })
   }
 })
 
@@ -113,9 +113,9 @@ router.post('/resetpwd', async (req, res) => {
     res.status(201).json({
       newUser
     })
-  } catch (e) {
-    console.err(err)
-    res.json({ msg: e.message })
+  } catch (err) {
+    console.error(err)
+    res.json({ msg: err.message })
   }
 })
 
@@ -127,21 +127,21 @@ router.delete('/delete', authToken, async (req, res) => {
 
     await User.deleteOne({ username: req.body.username })
 
-    // Node.deleteMany({
-    //   user: req.body.username
-    // }, err => {
-    //   throw new Error(err.message)
-    // })
+    Node.deleteMany({
+      user: req.body.username
+    }, err => {
+      throw new Error(err.message)
+    })
 
-    // Reading.deleteMany({
-    //   user: req.body.username
-    // }, err => {
-    //   throw new Error(err.message)
-    // })
+    Reading.deleteMany({
+      user: req.body.username
+    }, err => {
+      throw new Error(err.message)
+    })
     logUpdates(req.user.username, actions.DELETE, entities.USER, req.body.username, false)
     res.json({ msg: 'Deleted' })
   } catch (err) {
-    console.err(err)
+    console.error(err)
     res.status(500).json({
       err: err.message
     })

@@ -46,8 +46,14 @@ app.use('/user', userRouter)
 const writeRouter = require('./routes/write')
 app.use('/write', writeRouter)
 
-const logsRouter = require('./routes/logs')
-app.use('/logs', logsRouter)
+const activitiesRouter = require('./routes/activities')
+app.use('/activities', activitiesRouter)
+
+const projectLogsRouter = require('./routes/logs')
+app.use('/logs', projectLogsRouter)
+
+const backupRouter = require('./routes/backup')
+app.use('/backup', backupRouter)
 
 app.get('/version', (_req, res) => {
   res.json({ version: '0.0.4' })

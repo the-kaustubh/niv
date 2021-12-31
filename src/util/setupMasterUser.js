@@ -28,7 +28,7 @@ async function setupMasterUser () {
       return null
     }
   } catch (err) {
-    console.err(err)
+    console.error(err)
     return err
   }
 }

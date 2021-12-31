@@ -1,20 +1,13 @@
 const express = require('express')
 const router = express.Router()
-const authenticateToken = require('../middleware/authToken')
-const Updates = require('../models/updates')
+const logPath = (process.env.LOGPATH) ? `${process.env.LOGPATH}/` : ''
 
-router.get('/', authenticateToken, async (_req, res) => {
-  try {
-    const updates = await Updates
-      .find({})
-      .sort({ datetime: -1 })
-      .limit(30)
-      .sort({ datetime: 1 })
+router.get('/', async (_req, res) => {
+  res.sendFile(`${logPath}ates_niv.com.log`)
+})
 
-    res.json({ updates })
-  } catch (err) {
-    res.json({ msg: err.message })
-  }
+router.get('/err', async (_req, res) => {
+  res.sendFile(`${logPath}ates_niv.error.log`)
 })
 
 module.exports = router
