@@ -78,8 +78,8 @@ POST /write/reading
 --
 POST /write/reading
 {
-  "uid": "100001",
-  "temperature": "60.6",
+  "uid": "100004",
+  "temperature": "54.6",
   "battery": "20",
   "user": "kaustubh"
 }
@@ -87,14 +87,14 @@ POST /write/reading
 --
 POST /write/reading
 {
-  "uid": "100000",
+  "uid": "100004",
   "temperature": "60.6",
   # "humidity": "69",
   # "co2": "69.0",
   # "pressure": "69",
   "user": "kaustubh",
   "backup": "1",
-  "datetime": "1629402407"
+  "datetime": "1629403847"
 }
 
 --

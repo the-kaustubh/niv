@@ -4,7 +4,6 @@ const express = require('express')
 const app = express()
 const mongoose = require('mongoose')
 const cors = require('cors')
-const path = require('path')
 const compression = require('compression')
 const initServer = require('./lib/InitServer')
 const setupMasterUser = require('./util/setupMasterUser')
@@ -24,8 +23,6 @@ mongoose.connect(
 app.use(express.json())
 app.use(cors())
 app.use(compression())
-
-app.use(express.static(path.resolve(__dirname, 'public')))
 
 const db = mongoose.connection
 db.on('error', (e) => logger.error(e))
@@ -57,10 +54,6 @@ app.use('/backup', backupRouter)
 
 app.get('/version', (_req, res) => {
   res.json({ version: '0.0.4' })
-})
-
-app.get(/.*/, (_req, res) => {
-  res.sendFile(path.resolve(__dirname, 'public', 'index.html'))
 })
 
 registerCRON('0 0 * * *', 'daily_backup', createBackup)
