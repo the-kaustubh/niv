@@ -1,17 +1,5 @@
 node_modules/
-niv-linux
-niv-win.exe
 data/
-*.log
-.log
-package-lock.json
-yarn.lock
-.env
 backup/
-
-logs
-
-# Elastic Beanstalk Files
-.elasticbeanstalk/*
-!.elasticbeanstalk/*.cfg.yml
-!.elasticbeanstalk/*.global.yml
+logs/
+.env
