@@ -114,19 +114,44 @@ router.post('/readings/all/', authenticateToken, async (req, res) => {
   const to = new Date(Date.parse(req.body.to) - TIMEZONE_OFFSET)
   let readings
   try {
-    readings = await Reading.find({
-      $and: [
-        { uid: UID },
-        {
+    // readings = await Reading.find({
+    //   $and: [
+    //     { uid: UID },
+    //     {
 
-          datetime: {
-            $gte: from,
-            $lte: to
-          }
+    //       datetime: {
+    //         $gte: from,
+    //         $lte: to
+    //       }
+    //     }
+    //   ]
+    // }).sort()
+    readings = await Reading.aggregate([
+      {
+        $match: {
+          $and: [
+            { uid: UID },
+            {
+
+              datetime: {
+                $gte: from,
+                $lte: to
+              }
+            }
+          ]
         }
-
-      ]
-    }).sort()
+      },
+      {
+        $sample: {
+          size: 500
+        }
+      },
+      {
+        $sort: {
+          datetime: 1
+        }
+      }
+    ])
     res.status(200).json(readings)
   } catch (err) {
     console.error(err)
