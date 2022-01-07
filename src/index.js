@@ -56,13 +56,16 @@ app.get('/version', (_req, res) => {
   res.json({ version: '0.0.4' })
 })
 
-registerCRON('0 0 * * *', 'daily_backup', createBackup)
+registerCRON('0 */5 * * *', 'daily_backup', createBackup)
 
 app.set('port', process.env.PORT || 3000)
+console.log(app.get('port'))
 
 app.listen(app.get('port'), () => {
   if (process.env.NODE_ENV === 'production') {
-    initServer()
+    if (process.env.NODE_ENV === 'production') {
+      initServer()
+    }
   }
   logger.info(`Server started in ${process.env.NODE_ENV} mode`)
 })
