@@ -3,3 +3,4 @@ data/
 backup/
 logs/
 .env
+package-lock.json
