@@ -5,7 +5,6 @@ const logger = require('../logging/logging')
 async function setupMasterUser () {
   try {
     const exists = await User.findOne({
-      email: process.env.FROM_EMAIL,
       username: 'master'
     })
     if (!exists) {
