@@ -1,9 +1,9 @@
 # https://niv-backend.herokuapp.com
 http://localhost:3000
--i
--s
+# -i
+# -s
 Accept: */*
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImthdXN0dWJoIiwiaW5zdGl0dXRlIjoianNwbSIsImRlc2lnbmF0aW9uIjoiYWRtaW4iLCJpYXQiOjE2Mjg2NzEzMzN9.JIFCIyXnb6NO1cgeMpNK-aD2x3b_Jjmlk9OxSgnhIoc
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1hc3RlciIsImluc3RpdHV0ZSI6Im5pdiIsImRlc2lnbmF0aW9uIjoic3VwZXJhZG1pbiIsImlhdCI6MTY0MTYzNTU5NX0.Cqu3Q_pwn8RzXK2YGTNRDiZg74_RHuwtSzTGDtCU6zE
 --
 
 --
@@ -87,12 +87,12 @@ POST /write/reading
 --
 POST /write/reading
 {
-  "uid": "100004",
+  "uid": "100003",
   "temperature": "60.6",
   # "humidity": "69",
   # "co2": "69.0",
   # "pressure": "69",
-  "user": "kaustubh",
+  "user": "master",
   "backup": "1",
   "datetime": "1629403847"
 }
@@ -110,7 +110,7 @@ GET /user/about
 GET /node/getcsv/100001
 
 --
-GET /write/setpoints/100000
+GET /write/setpoints/100003
 
 --
 GET /user/allusers

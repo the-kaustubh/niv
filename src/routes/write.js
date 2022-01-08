@@ -12,6 +12,7 @@ router.post('/reading', async (req, res) => {
       const dt = moment.unix(parseInt(req.body.datetime) - 19800).utc()
       req.body.datetime = new Date(dt)
     }
+    await req.cache.del(req.body.user)
 
     const reading = new Reading(req.body)
     const savedReading = await reading.save()
@@ -44,9 +45,13 @@ router.post('/reading', async (req, res) => {
 router.get('/setpoints/:uid', async (req, res) => {
   try {
     const UID = req.params.uid
-    const node = await Node.findOne({ uid: UID })
+    const node = await Node.findOne({ uid: UID }, {
+      co2Range: 1,
+      temperatureRange: 1,
+      humidityRange: 1
+    })
 
-    res.send({
+    res.json({
       co2min: node?.co2Range?.min,
       co2max: node?.co2Range?.max,
 

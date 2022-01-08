@@ -69,22 +69,30 @@ const TIMEZONE_OFFSET = 19800000
 router.get('/', authenticateToken, async (req, res) => {
   try {
     let nodes
-    switch (req.user.privilege) {
-      case 0:
-      case 1:
-      case 3:
-        nodes = await Node.find({ isArchived: false }).populate('reading').exec()
-        break
-      case 2:
-        nodes = await Node.find({ user: req.user.username, isArchived: false }).populate('reading').exec()
-        break
-      case 4:
-        nodes = await Node.find({ user: req.user.createdBy.username, isArchived: false }).populate('reading').exec()
-        break
-      default:
-        throw new Error('Invalid user')
+    const cachedNodes = await req.cache.get(req.user.username)
+    if (cachedNodes) {
+      console.log('Cache hit')
+      res.json(JSON.parse(cachedNodes))
+    } else {
+      console.log('Cache miss')
+      switch (req.user.privilege) {
+        case 0:
+        case 1:
+        case 3:
+          nodes = await Node.find({ isArchived: false }, { __v: 0 }).populate('reading').exec()
+          break
+        case 2:
+          nodes = await Node.find({ user: req.user.username, isArchived: false }, { __v: 0 }).populate('reading').exec()
+          break
+        case 4:
+          nodes = await Node.find({ user: req.user.createdBy.username, isArchived: false }, { __v: 0 }).populate('reading').exec()
+          break
+        default:
+          throw new Error('Invalid user')
+      }
+      req.cache.set(req.user.username, JSON.stringify(nodes))
+      res.json(nodes)
     }
-    res.json(nodes)
   } catch (err) {
     console.error(err)
     res.json({ message: err.message })
