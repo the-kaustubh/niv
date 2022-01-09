@@ -37,7 +37,6 @@ router.get('/', async (_req, res) => {
       }
       const fAr = []
       files.forEach((f) => {
-        console.log(`${backupPath}${f}`)
         fAr.push(f)
       })
       res.json({ files: fAr })

@@ -70,11 +70,11 @@ router.get('/', authenticateToken, async (req, res) => {
   try {
     let nodes
     const cachedNodes = await req.cache.get(req.user.username)
-    if (cachedNodes) {
-      console.log('Cache hit')
-      res.json(JSON.parse(cachedNodes))
+    if (JSON.parse(cachedNodes) > 0) {
+      console.log('cache hit')
+      res.json()
     } else {
-      console.log('Cache miss')
+      console.log('cache miss')
       switch (req.user.privilege) {
         case 0:
         case 1:
@@ -116,24 +116,24 @@ router.get('/readings/:uid', authenticateToken, async (req, res) => {
   }
 })
 
+// readings = await Reading.find({
+//   $and: [
+//     { uid: UID },
+//     {
+
+//       datetime: {
+//         $gte: from,
+//         $lte: to
+//       }
+//     }
+//   ]
+// }).sort()
 router.post('/readings/all/', authenticateToken, async (req, res) => {
   const UID = req.body.uid
   const from = new Date(Date.parse(req.body.from) - TIMEZONE_OFFSET)
   const to = new Date(Date.parse(req.body.to) - TIMEZONE_OFFSET)
   let readings
   try {
-    // readings = await Reading.find({
-    //   $and: [
-    //     { uid: UID },
-    //     {
-
-    //       datetime: {
-    //         $gte: from,
-    //         $lte: to
-    //       }
-    //     }
-    //   ]
-    // }).sort()
     readings = await Reading.aggregate([
       {
         $match: {
@@ -233,6 +233,7 @@ router.post('/modify', authenticateToken, getNode, async (req, res) => {
   try {
     const newNode = await Node.findOneAndUpdate(conditions, update)
     logUpdates(req.user.username, actions.UPDATE, entities.NODE, newNode.uid, true)
+    req.cache.del(req.user.username)
     res.status(201).json({ node: newNode })
   } catch (err) {
     console.error(err)

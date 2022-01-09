@@ -2,10 +2,17 @@ const { spawn } = require('child_process')
 
 const BackupDir = (process.env.BACKUPDIR) ? `${process.env.BACKUPDIR}/` : ''
 
-function createBackup () {
-  const [dt, tm] = new Date().toJSON().split('T')
+function formatDate (date) {
+  const [dt, tm] = date.split(' ')
+  const [dd, MM] = dt.split('/')
   const [hh, mm] = tm.split(':')
-  const fileName = `${BackupDir}ates-backup_${dt}_${hh}:${mm}.gz`
+  const z = (x) => (x > 10) ? `${x}` : `0${x}`
+  return `${z(dd)}-${z(MM)}_${z(hh)}:${z(mm)}`
+}
+
+function createBackup () {
+  const dt = formatDate(new Date().toLocaleString())
+  const fileName = `${BackupDir}ates-backup_${dt}.gz`
 
   console.error('Backup Started')
   const bkpProc = spawn('mongodump', [
