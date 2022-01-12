@@ -69,10 +69,12 @@ const TIMEZONE_OFFSET = 19800000
 router.get('/', authenticateToken, async (req, res) => {
   try {
     let nodes
-    const cachedNodes = await req.cache.get(req.user.username)
-    if (JSON.parse(cachedNodes) > 0) {
+    let cachedNodes = await req.cache.get(req.user.username)
+    cachedNodes = JSON.parse(cachedNodes)
+
+    if (cachedNodes.length > 0) {
       console.log('cache hit')
-      res.json()
+      res.json(cachedNodes)
     } else {
       console.log('cache miss')
       switch (req.user.privilege) {
@@ -306,26 +308,45 @@ router.get('/getcsv/:uid', async (req, res) => {
   }
 })
 
-router.get('/convert2csv', async (req, res) => {
+router.get('/csv/:uid/:from/:to', async (req, res) => {
   try {
-    const uid = req.params.uid
-    const readingsDB = await Reading.find({ uid: uid })
-    const readingsToSend = []
-    for (let i = 0; i < readingsDB.length; i++) {
-      readingsToSend.push({
-        uid: readingsDB[i].uid,
-        user: readingsDB[i].user,
-        datetime: readingsDB[i].datetime,
-        pressure: readingsDB[i].pressure,
-        humidity: readingsDB[i].humidity,
-        co2: readingsDB[i].co2,
-        temperature: readingsDB[i].temperature
+    const { uid, to, from } = req.params
+    const dateFrom = new Date(Date.parse(from) - TIMEZONE_OFFSET)
+    const dateTo = new Date(Date.parse(to) - TIMEZONE_OFFSET)
+
+    const readingsDB = await Reading.find(
+      {
+        $and: [
+          { uid: uid },
+          {
+            datetime: {
+              $gte: dateFrom,
+              $lte: dateTo
+            }
+          }
+        ]
+      },
+      {
+        _id: 0,
+        datetime: 1,
+        temperature: 1,
+        humidity: 1,
+        co2: 1
       })
+    let csvData = 'Date,Time,Temperature,Humidity,CO2\n'
+    for (let i = 0; i < readingsDB.length; i++) {
+      csvData += `${new Date(readingsDB[i].datetime).toLocaleDateString()},`
+      csvData += `${new Date(readingsDB[i].datetime).toLocaleTimeString()},`
+      csvData += `${readingsDB[i].temperature || 0},`
+      csvData += `${readingsDB[i].humidity || 0},`
+      csvData += `${readingsDB[i].co2 || 0}\n`
     }
 
-    res.setHeader('Content-Type', 'text/csv')
+    res.setHeader('Content-Type', 'text/plain')
     res.setHeader('Content-Disposition', `attachment; filename="data.${uid}.csv"`)
-    await createCSV(readingsToSend, res)
+    res.write(csvData)
+    res.end('')
+    // await createCSV(readingsToSend, res)
   } catch (err) {
     console.error(err)
     res.json({ msg: err.message })
