@@ -16,7 +16,7 @@ router.post('/register', authToken, async (req, res) => {
     const code = GenerateCode()
     const user = new User({
       username: req.body.username,
-      password: '',
+      password: 'blank',
       email: req.body.email,
       createdBy: req.user._id,
       institute: req.body.institute,

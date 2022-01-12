@@ -73,10 +73,8 @@ router.get('/', authenticateToken, async (req, res) => {
     cachedNodes = JSON.parse(cachedNodes)
 
     if (cachedNodes.length > 0) {
-      console.log('cache hit')
       res.json(cachedNodes)
     } else {
-      console.log('cache miss')
       switch (req.user.privilege) {
         case 0:
         case 1:
