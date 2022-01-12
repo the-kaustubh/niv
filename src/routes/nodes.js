@@ -72,7 +72,7 @@ router.get('/', authenticateToken, async (req, res) => {
     let cachedNodes = await req.cache.get(req.user.username)
     cachedNodes = JSON.parse(cachedNodes)
 
-    if (cachedNodes.length > 0) {
+    if (cachedNodes && cachedNodes.length > 0) {
       res.json(cachedNodes)
     } else {
       switch (req.user.privilege) {
