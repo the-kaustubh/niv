@@ -13,6 +13,7 @@ router.post('/reading', async (req, res) => {
       req.body.datetime = new Date(dt)
     }
     await req.cache.del(req.body.user)
+    await req.cache.del('master')
 
     const reading = new Reading(req.body)
     const savedReading = await reading.save()

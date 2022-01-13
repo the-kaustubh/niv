@@ -90,7 +90,7 @@ router.get('/', authenticateToken, async (req, res) => {
         default:
           throw new Error('Invalid user')
       }
-      req.cache.set(req.user.username, JSON.stringify(nodes))
+      req.cache.setEx(req.user.username, 300, JSON.stringify(nodes))
       res.json(nodes)
     }
   } catch (err) {
