@@ -11,6 +11,7 @@ const cacheRoutes = require('./middleware/cacheRoutes')
 const initServer = require('./lib/InitServer')
 const setupMasterUser = require('./util/setupMasterUser')
 const logger = require('./logging/logging')
+const getUrl = require('./middleware/getUrl')
 const { createBackup } = require('./util/dbBackup')
 const { registerCRON } = require('./util/cronJob')
 
@@ -26,17 +27,18 @@ mongoose.connect(
 app.use(express.json())
 app.use(cors())
 app.use(compression())
+app.use(getUrl)
 
 const redisClient = initRedisCache()
 app.use(cacheRoutes(redisClient));
 
 (async () => {
   try {
-   await redisClient.set('k', 'kaustubh')
+    await redisClient.set('k', 'kaustubh')
   } catch (e) {
     console.log(e)
   }
-})();
+})()
 
 const db = mongoose.connection
 db.on('error', (e) => logger.error(e))

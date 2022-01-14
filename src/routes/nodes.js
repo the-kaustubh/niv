@@ -331,20 +331,12 @@ router.get('/csv/:uid/:from/:to', async (req, res) => {
         humidity: 1,
         co2: 1
       })
-    let csvData = 'Date,Time,Temperature,Humidity,CO2\n'
-    for (let i = 0; i < readingsDB.length; i++) {
-      csvData += `${new Date(readingsDB[i].datetime).toLocaleDateString()},`
-      csvData += `${new Date(readingsDB[i].datetime).toLocaleTimeString()},`
-      csvData += `${readingsDB[i].temperature || 0},`
-      csvData += `${readingsDB[i].humidity || 0},`
-      csvData += `${readingsDB[i].co2 || 0}\n`
-    }
+    const csvData = createCSV(readingsDB)
 
     res.setHeader('Content-Type', 'text/plain')
     res.setHeader('Content-Disposition', `attachment; filename="data.${uid}.csv"`)
     res.write(csvData)
     res.end('')
-    // await createCSV(readingsToSend, res)
   } catch (err) {
     console.error(err)
     res.json({ msg: err.message })

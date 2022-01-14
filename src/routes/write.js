@@ -29,7 +29,7 @@ router.post('/reading', async (req, res) => {
     )
 
     if (updatedNode == null) {
-      throw new Error('Could not save.')
+      throw new Error('Could not save.' + req.body.uid)
     }
 
     res.status(201).json(
