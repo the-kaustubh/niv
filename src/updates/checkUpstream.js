@@ -8,6 +8,7 @@ async function checkForUpdates () {
       .trim()
       .split('\n')[0]
       .search(/behind/)
+    console.log(so)
     if (so === -1) {
       console.log('no updates found')
       return
