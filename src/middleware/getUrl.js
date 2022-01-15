@@ -1,11 +1,14 @@
 async function getUrl (req, _res, next) {
-  const route = req.originalUrl.split('/')[1]
+  const routeParts = req.originalUrl.split('/')
+  const routeFor = routeParts[1]
+  const routeAction = routeParts[2]
 
-  console.log({
-    route: route,
+  req.info = {
+    for: routeFor,
+    action: routeAction,
     url: req.originalUrl,
     method: req.method
-  })
+  }
   next()
 }
 
