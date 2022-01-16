@@ -15,24 +15,7 @@ jobs:
       - name: 'Install dependencies'
         run: npm ci
       - name: 'Create .env file'
-        run: |
-          cat << EOF > .env
-          PORT="3000"
-          DATABASE_URL="mongodb://localhost/niv"
-          ACCESS_TOKEN="secretsecretsecret"
-          FROM_EMAIL="kaustubh.murumkar@gmail.com"
-          FROM_PWD="ywfrfjtrjfncdfmr"
-          EMAIL_TOK="secretsecretsecretsecretsecretsecret"
-          HOST="http://localhost"
-          NODE_ENV="development"
-          REDIS_PORT="6379"
-          REDIS_HOST="localhost"
-          REDIS="yes"
-          INSTITUTE="niv"
-          MASTER_PWD="admin1234"
-          LOGPATH="logs/"
-          BACKUPDIR="backup/"
-          EOF
+        run: touch .env
       - name: 'Run Build'
         run: npm run pkg
       - name: 'Upload Binary artifacts'
