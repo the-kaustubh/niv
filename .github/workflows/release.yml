@@ -10,6 +10,8 @@ jobs:
     steps:
       - name: 'Checkout Code'
         uses: actions/checkout@v2
+      - name: 'Install Packaging module'
+        run: npm install -g pkg
       - name: 'Run Build'
         run: npm run pkg
       - name: 'Upload Binary artifacts'
