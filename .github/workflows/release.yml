@@ -30,6 +30,7 @@ jobs:
           MASTER_PWD=admin1234
           LOGPATH=logs/
           BACKUPDIR=backup/
+          EOF
       - name: 'Run Build'
         run: npm run pkg
       - name: 'Upload Binary artifacts'
