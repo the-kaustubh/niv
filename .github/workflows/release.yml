@@ -5,13 +5,13 @@ on:
       - master
 jobs:
   build:
-    name: 'Build PowerPoint Presentation'
+    name: 'Build NIV binary'
     runs-on: ubuntu-latest
     steps:
       - name: 'Checkout Code'
         uses: actions/checkout@v2
       - name: 'Run Build'
-        run: npm run build
+        run: npm run pkg
       - name: 'Upload Binary artifacts'
         uses: actions/upload-artifact@v2
         with:
