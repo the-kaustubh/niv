@@ -1,0 +1,36 @@
+name: 'Release Binary'
+on:
+  push:
+    branches:
+      - master
+jobs:
+  build:
+    name: 'Build PowerPoint Presentation'
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Checkout Code'
+        uses: actions/checkout@v2
+      - name: 'Run Build'
+        run: npm run build
+      - name: 'Upload Binary artifacts'
+        uses: actions/upload-artifact@v2
+        with:
+          name: niv
+          path: ./niv
+  release:
+    name: 'Create GitHub Release'
+    runs-on: ubuntu-latest
+    needs: [ build ]
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - name: 'Download Binary Artifacts'
+        uses: actions/download-artifact@v2
+        with:
+          name: niv
+      - name: 'Create GitHub Release'
+        uses: softprops/action-gh-release@v1
+        with:
+          files: ./niv
+          tag_name: v${{ github.run_number }}
+          name: Release V${{ github.run_number }}
