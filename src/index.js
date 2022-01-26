@@ -12,7 +12,6 @@ const initServer = require('./lib/InitServer')
 const setupMasterUser = require('./util/setupMasterUser')
 const logger = require('./logging/logging')
 const getUrl = require('./middleware/getUrl')
-const { checkForUpdates } = require('./updates/checkUpstream')
 const { createBackup } = require('./util/dbBackup')
 const { registerCRON } = require('./util/cronJob')
 
@@ -72,10 +71,8 @@ app.use('/backup', backupRouter)
 const metaRouter = require('./routes/meta')
 app.use('/meta', metaRouter)
 
-app.use('/updates', (_req, res) => {
-  checkForUpdates()
-  res.json({ msg: 'Checking for updates' })
-})
+const updatesRouter = require('./routes/autoUpdates')
+app.use('/updates', updatesRouter)
 
 registerCRON('0 */5 * * *', 'daily_backup', createBackup)
 
