@@ -15,7 +15,7 @@ async function checkForUpdatesServer (token) {
 
 async function checkForUpdatesClient (token) {
   try {
-    await runCmd('rm', ['/var/www/wdl', '-f'])
+    await runCmd('rm', ['/var/www/wdl', '-rf'])
     await runCmd('rm', ['/app/niv-client.zip', '-f'])
     await runDownloader(true, token)
 

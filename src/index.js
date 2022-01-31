@@ -30,15 +30,7 @@ app.use(compression())
 app.use(getUrl)
 
 const redisClient = initRedisCache()
-app.use(cacheRoutes(redisClient));
-
-(async () => {
-  try {
-    await redisClient.set('k', 'kaustubh')
-  } catch (e) {
-    console.log(e)
-  }
-})()
+app.use(cacheRoutes(redisClient))
 
 const db = mongoose.connection
 db.on('error', (e) => logger.error(e))
