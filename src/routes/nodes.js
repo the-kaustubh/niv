@@ -99,6 +99,21 @@ router.get('/', authenticateToken, async (req, res) => {
   }
 })
 
+router.get('/:uid', authenticateToken, async (req, res) => {
+  let node
+  try {
+    node = await Node.findOne({
+      uid: req.params.uid
+    })
+      .populate('reading')
+      .exec()
+    res.json(node)
+  } catch (e) {
+    console.error(err)
+    res.status(500).json({ message: err.message })
+  }
+})
+
 router.get('/readings/:uid', authenticateToken, async (req, res) => {
   const UID = req.params.uid
   let readings
