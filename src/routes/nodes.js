@@ -188,6 +188,7 @@ router.get('/archived', authenticateToken, async (_req, res) => {
     nodes = await Node.find({
       isArchived: true
     }).sort()
+    console.log(nodes)
     res.status(200).json(nodes)
   } catch (err) {
     console.error(err)
