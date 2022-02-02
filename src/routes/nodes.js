@@ -65,7 +65,6 @@ const TIMEZONE_OFFSET = 19800000
 //   ]).allowDiskUse(true)
 //   return result
 // }
-
 router.get('/', authenticateToken, async (req, res) => {
   try {
     let nodes
@@ -99,21 +98,6 @@ router.get('/', authenticateToken, async (req, res) => {
   }
 })
 
-router.get('/:uid', authenticateToken, async (req, res) => {
-  let node
-  try {
-    node = await Node.findOne({
-      uid: req.params.uid
-    })
-      .populate('reading')
-      .exec()
-    res.json(node)
-  } catch (e) {
-    console.error(err)
-    res.status(500).json({ message: err.message })
-  }
-})
-
 router.get('/readings/:uid', authenticateToken, async (req, res) => {
   const UID = req.params.uid
   let readings
@@ -131,64 +115,12 @@ router.get('/readings/:uid', authenticateToken, async (req, res) => {
   }
 })
 
-// readings = await Reading.find({
-//   $and: [
-//     { uid: UID },
-//     {
-
-//       datetime: {
-//         $gte: from,
-//         $lte: to
-//       }
-//     }
-//   ]
-// }).sort()
-router.post('/readings/all/', authenticateToken, async (req, res) => {
-  const UID = req.body.uid
-  const from = new Date(Date.parse(req.body.from) - TIMEZONE_OFFSET)
-  const to = new Date(Date.parse(req.body.to) - TIMEZONE_OFFSET)
-  let readings
-  try {
-    readings = await Reading.aggregate([
-      {
-        $match: {
-          $and: [
-            { uid: UID },
-            {
-
-              datetime: {
-                $gte: from,
-                $lte: to
-              }
-            }
-          ]
-        }
-      },
-      {
-        $sample: {
-          size: 500
-        }
-      },
-      {
-        $sort: {
-          datetime: 1
-        }
-      }
-    ])
-    res.status(200).json(readings)
-  } catch (err) {
-    console.error(err)
-    res.status(500).json({ message: err.message })
-  }
-})
-
-router.get('/archived', authenticateToken, async (_req, res) => {
+router.get('/archived', authenticateToken, async (req, res) => {
   let nodes
   try {
     nodes = await Node.find({
       isArchived: true
     }).sort()
-    console.log(nodes)
     res.status(200).json(nodes)
   } catch (err) {
     console.error(err)
@@ -356,6 +288,60 @@ router.get('/csv/:uid/:from/:to', async (req, res) => {
   } catch (err) {
     console.error(err)
     res.json({ msg: err.message })
+  }
+})
+
+router.post('/readings/all/', authenticateToken, async (req, res) => {
+  const UID = req.body.uid
+  const from = new Date(Date.parse(req.body.from) - TIMEZONE_OFFSET)
+  const to = new Date(Date.parse(req.body.to) - TIMEZONE_OFFSET)
+  let readings
+  try {
+    readings = await Reading.aggregate([
+      {
+        $match: {
+          $and: [
+            { uid: UID },
+            {
+
+              datetime: {
+                $gte: from,
+                $lte: to
+              }
+            }
+          ]
+        }
+      },
+      {
+        $sample: {
+          size: 500
+        }
+      },
+      {
+        $sort: {
+          datetime: 1
+        }
+      }
+    ])
+    res.status(200).json(readings)
+  } catch (err) {
+    console.error(err)
+    res.status(500).json({ message: err.message })
+  }
+})
+
+router.get('/search/:uid', authenticateToken, async (req, res) => {
+  let node
+  try {
+    node = await Node.findOne({
+      uid: req.params.uid
+    })
+      .populate('reading')
+      .exec()
+    res.json(node)
+  } catch (e) {
+    console.error(err)
+    res.status(500).json({ message: err.message })
   }
 })
 
