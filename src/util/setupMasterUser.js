@@ -12,7 +12,7 @@ async function setupMasterUser () {
       const master = new User({
         username: 'master',
         password: pwd,
-        email: process.env.FROM_EMAIL,
+        email: process.env.MASTER_EMAIL,
         institute: process.env.INSTITUTE,
         designation: 'superadmin',
         verification: {

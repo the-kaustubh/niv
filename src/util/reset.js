@@ -14,9 +14,13 @@ const sendResetLink = async (user) => {
       subject: ' Password Reset ',
       html: `<b> Hello ${user.username}</b>, you had requested for password reset <br>
       Here is your password reset link <br>
-      <a href="${process.env.HOST}:8080/passwordreset?token=${token}">Click Here</a>     
+      <a href="${process.env.HOST}/#/passwordreset?token=${token}">Click Here</a>
 
-      ATES OPL
+      If this was not initiated by you please ignore.
+
+
+      Regards,
+      ATES OPL Pvt. Ltd.
       `
     })
     return info

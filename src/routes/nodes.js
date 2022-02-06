@@ -11,60 +11,6 @@ const { actions, entities, logUpdates } = require('../util/logUpdates')
 
 const TIMEZONE_OFFSET = 19800000
 
-// async function aggregatePipeline (filter) {
-//   const result = await Node.aggregate([
-//     { $match: filter },
-//     {
-//       $lookup: {
-//         from: 'readings',
-//         localField: 'uid',
-//         foreignField: 'uid',
-//         as: 'readings'
-//       }
-//     },
-//     { $unwind: '$readings' },
-//     { $sort: { 'readings.datetime': -1 } },
-//     {
-//       $group: {
-//         _id: '$_id',
-//         uid: { $first: '$uid' },
-//         location: { $first: '$location' },
-//         machineName: { $first: '$machineName' },
-//         readings: { $push: '$readings' },
-//         isTemperature: { $first: '$isTemperature' },
-//         isHumidity: { $first: '$isHumidity' },
-//         isCO2: { $first: '$isCO2' },
-//         co2Range: { $first: '$co2Range' },
-//         temperatureRange: { $first: '$temperatureRange' },
-//         humidityRange: { $first: '$humidityRange' }
-//       }
-//     },
-//     {
-//       $project: {
-//         _id: 0,
-//         readings: { $arrayElemAt: ['$readings', 0] },
-//         uid: 1,
-//         location: 1,
-//         machineName: 1,
-//         isTemperature: 1,
-//         isHumidity: 1,
-//         isCO2: 1,
-//         co2Range: { min: 1, max: 1 },
-//         temperatureRange: { min: 1, max: 1 },
-//         humidityRange: { min: 1, max: 1 }
-//       }
-//     },
-//     {
-//       $project: {
-//         readings: {
-//           _id: 0,
-//           __v: 0
-//         }
-//       }
-//     }
-//   ]).allowDiskUse(true)
-//   return result
-// }
 router.get('/', authenticateToken, async (req, res) => {
   try {
     let nodes

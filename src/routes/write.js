@@ -1,19 +1,28 @@
 const express = require('express')
 const router = express.Router()
+const moment = require('moment')
 const Node = require('../models/nodes')
 const Reading = require('../models/readings')
-const moment = require('moment')
-// const checkHealthNodes = require('../util/checkHealthNodes')
-// const reportMail = require('../util/reportMail')
+const getNode = require('../middleware/getNode')
 
-router.post('/reading', async (req, res) => {
+const checkHealth = require('../util/checkHealthNodes')
+const { updateNodeForUser } = require('../util/faultyNodesOfUsers')
+const reportMail = require('../util/reportMail')
+
+router.post('/reading', getNode, async (req, res) => {
   try {
     if (req.body.backup === '1') {
       const dt = moment.unix(parseInt(req.body.datetime) - 19800).utc()
       req.body.datetime = new Date(dt)
     }
-    await req.cache.del(req.body.user)
-    await req.cache.del('master')
+    req.cache.del(req.body.user)
+    req.cache.del('master')
+
+    const isFaulty = checkHealth(req.body, req.node)
+    updateNodeForUser(req.body.user, req.body.uid, isFaulty)
+    if (isFaulty) {
+      reportMail(req.body.user)
+    }
 
     const reading = new Reading(req.body)
     const savedReading = await reading.save()
@@ -25,18 +34,17 @@ router.post('/reading', async (req, res) => {
 
     const updatedNode = await Node.findOneAndUpdate(
       { uid: req.body.uid },
-      { reading: newId }
+      {
+        reading: newId,
+        isCurrentlyFaulty: isFaulty
+      }
     )
 
     if (updatedNode == null) {
       throw new Error('Could not save - ' + req.body.uid + '. Please check if node exists')
     }
 
-    res.status(201).json(
-      {
-        msg: 'OK'
-      }
-    )
+    res.status(201).json({ msg: 'OK' })
   } catch (err) {
     console.err(err)
     res.status(500).json({ msg: err.message })

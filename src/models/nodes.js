@@ -55,6 +55,10 @@ const nodeSchema = new mongoose.Schema({
   humidityRange: {
     type: RangeSchema
   },
+  isCurrentlyFaulty: {
+    type: Boolean,
+    default: false
+  },
   isArchived: {
     type: Boolean,
     default: false

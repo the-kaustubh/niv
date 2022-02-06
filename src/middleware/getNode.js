@@ -5,7 +5,7 @@ async function getNode (req, res, next) {
   try {
     node = await Node.find({ uid: req.body.uid })
     if (node == null) {
-      return res.status(404).json({ message: 'Cannot Find Node' })
+      return res.status(404).json({ message: `Cannot Find Node: ${req.body.uid}` })
     }
   } catch (err) {
     console.err(err)

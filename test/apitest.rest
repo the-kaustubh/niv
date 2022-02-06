@@ -1,16 +1,16 @@
 # https://niv-backend.herokuapp.com
 http://localhost:3000
-# -i
-# -s
+-i
+-s
 Accept: */*
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1hc3RlciIsImluc3RpdHV0ZSI6Im5pdiIsImRlc2lnbmF0aW9uIjoic3VwZXJhZG1pbiIsImlhdCI6MTY0MTYzNTU5NX0.Cqu3Q_pwn8RzXK2YGTNRDiZg74_RHuwtSzTGDtCU6zE
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1hc3RlciIsImluc3RpdHV0ZSI6Im5pdiIsImRlc2lnbmF0aW9uIjoic3VwZXJhZG1pbiIsImlhdCI6MTY0NDA2Njg3MH0.-CFWQg7xQdy_9D-vULsW8S7mYSCGhzClimJ_8g2vC5c
 --
 
 --
 GET /
 
 --
-GET /node
+GET /node/
 
 --
 POST /user/register
@@ -39,11 +39,15 @@ POST /user/login
   "password": "admin1234"
 }
 
+# {
+#   "username": "master",
+#   "password": "admin1234"
+# }
 --
 POST /user/login
 {
   "username": "kaustubh",
-  "password": "kasdlsaustubh"
+  "password": "kaustubh"
 }
 
 --
@@ -51,6 +55,7 @@ POST /node/add
 {
   "uid": "100000",
   "location": "lab1",
+  "sublocation": "lab1",
   "machineName": "freezer",
   "isTemp": true,
   "isCO2": false,
@@ -69,10 +74,10 @@ DELETE /node/100000
 POST /write/reading
 {
   "uid": "100000",
-  "temperature": "24",
+  "temperature": "82",
   # "humidity": "12",
   # "battery": "20",
-  "user": "kaustubh"
+  "user": "master"
 }
 
 --
