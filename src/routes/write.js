@@ -1,13 +1,14 @@
 const express = require('express')
+
 const router = express.Router()
 const moment = require('moment')
 const Node = require('../models/nodes')
 const Reading = require('../models/readings')
 const getNode = require('../middleware/getNode')
 
+const reportMail = require('../util/reportMail')
 const checkHealth = require('../util/checkHealthNodes')
 const { updateNodeForUser } = require('../util/faultyNodesOfUsers')
-const reportMail = require('../util/reportMail')
 
 router.post('/reading', getNode, async (req, res) => {
   try {
@@ -21,6 +22,7 @@ router.post('/reading', getNode, async (req, res) => {
     const isFaulty = checkHealth(req.body, req.node)
     updateNodeForUser(req.body.user, req.body.uid, isFaulty)
     if (isFaulty) {
+      req.cache.setEx(`mail_${req.body.user}`, 30, 'yes')
       reportMail(req.body.user)
     }
 

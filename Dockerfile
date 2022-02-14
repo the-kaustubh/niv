@@ -1,12 +1,16 @@
-FROM node:16.10.0
+FROM node:16.13.0
 
 WORKDIR /app
 
-COPY package*.json ./
+COPY package.json .
 
-RUN npm install
+ENV NODE_ENV=production
 
-COPY . .
+RUN npm install --production
+
+COPY src ./src
+
+COPY env ./.env
 
 EXPOSE 3000
 

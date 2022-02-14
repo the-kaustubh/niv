@@ -25,7 +25,7 @@ async function authenticateToken (req, res, next) {
     req.user = userPresent
     next()
   } catch (e) {
-    console.err(err)
+    console.err(e)
     res.json({ msg: e.message })
   }
 }
