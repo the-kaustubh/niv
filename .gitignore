@@ -3,4 +3,5 @@ data/
 backup/
 logs/
 .env
+niv
 package-lock.json

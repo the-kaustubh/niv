@@ -7,8 +7,11 @@ async function getUrl (req, _res, next) {
     for: routeFor,
     action: routeAction,
     url: req.originalUrl,
+    ip: req.ip,
     method: req.method
   }
+  // console.log({ headers: req.headers })
+  // console.log({ conn: req.connection.server })
   next()
 }
 
