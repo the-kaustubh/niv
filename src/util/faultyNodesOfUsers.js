@@ -6,11 +6,11 @@ async function pushFaultyNode (username, uid) {
       { username: username },
       { $addToSet: { faulty: uid } }
     )
-    if (updatedUser == null) {
+    if (!updatedUser) {
       throw new Error('Could not update faulty nodes')
     }
   } catch (err) {
-    console.error(err)
+    console.info(err)
   }
 }
 
@@ -20,11 +20,11 @@ async function pullFaultyNode (username, uid) {
       { username: username },
       { $pull: { faulty: uid } }
     )
-    if (updatedUser == null) {
+    if (!updatedUser) {
       throw new Error('Could not update faulty nodes')
     }
   } catch (err) {
-    console.error(err)
+    console.info(err)
   }
 }
 

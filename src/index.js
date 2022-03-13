@@ -29,6 +29,8 @@ app.use(cors())
 app.use(compression())
 app.use(getUrl)
 
+app.disable('etag')
+
 const redisClient = initRedisCache()
 app.use(cacheRoutes(redisClient))
 

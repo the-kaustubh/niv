@@ -16,7 +16,8 @@ async function authenticateToken (req, res, next) {
 
     const userPresent = await User.findOne({
       username: usr.username
-    }).populate('user').exec()
+    }).populate('createdBy').exec()
+    // console.log(userPresent)
 
     if (userPresent == null) {
       return res.json({ msg: 'Unauthorized' })

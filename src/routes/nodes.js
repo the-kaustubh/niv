@@ -17,6 +17,7 @@ router.get('/', authenticateToken, async (req, res) => {
     let cachedNodes = await req.cache.get(req.user.username)
     cachedNodes = JSON.parse(cachedNodes)
 
+    // console.log(req.user.createdBy.username)
     if (cachedNodes && cachedNodes.length > 0) {
       res.json(cachedNodes)
     } else {
