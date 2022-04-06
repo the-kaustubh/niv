@@ -37,8 +37,8 @@ router.post('/reading', getNode, async (req, res) => {
     const updatedNode = await Node.findOneAndUpdate(
       { uid: req.body.uid },
       {
-        reading: newId,
-        isCurrentlyFaulty: isFaulty
+        reading: newId
+        // isCurrentlyFaulty: isFaulty
       }
     )
 
