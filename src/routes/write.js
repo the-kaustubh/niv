@@ -19,12 +19,13 @@ router.post('/reading', getNode, async (req, res) => {
     req.cache.del(req.body.user)
     req.cache.del('master')
 
-    const isFaulty = checkHealth(req.body, req.node)
-    updateNodeForUser(req.body.user, req.body.uid, isFaulty)
-    if (isFaulty) {
-      req.cache.setEx(`mail_${req.body.user}`, 30, 'yes')
-      reportMail(req.body.user)
-    }
+    // // Disabling due to server error
+    // const isFaulty = checkHealth(req.body, req.node)
+    // updateNodeForUser(req.body.user, req.body.uid, isFaulty)
+    // if (isFaulty) {
+    //   req.cache.setEx(`mail_${req.body.user}`, 30, 'yes')
+    //   reportMail(req.body.user)
+    // }
 
     const reading = new Reading(req.body)
     const savedReading = await reading.save()
