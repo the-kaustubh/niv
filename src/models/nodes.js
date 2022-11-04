@@ -31,6 +31,9 @@ const nodeSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'reading'
   },
+  lastKnownIp: {
+    type: String,
+  },
   isTemperature: {
     type: Boolean,
     required: true

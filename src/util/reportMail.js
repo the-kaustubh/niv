@@ -6,6 +6,10 @@ const emailInterval = HRS * 60 * 60 * 1000
 
 const reportMail = async (username) => {
   const user = await User.findOne({ username: username })
+  if (user == null) {
+    console.log(`invalid user ${username}`)
+    return
+  }
 
   const lastMailAt = user.mailSent
   if (!lastMailAt || new Date() - lastMailAt > emailInterval) {
@@ -33,7 +37,7 @@ const reportMail = async (username) => {
       console.log(updatedUser)
     }
   } else {
-    console.log('Mail sent less than 5 hrs ago, not sending')
+    console.log(`Mail sent less than ${HRS} hrs ago, not sending`)
   }
 }
 

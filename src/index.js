@@ -59,8 +59,8 @@ app.use('/activities', activitiesRouter)
 const projectLogsRouter = require('./routes/logs')
 app.use('/logs', projectLogsRouter)
 
-const backupRouter = require('./routes/backup')
-app.use('/backup', backupRouter)
+// const backupRouter = require('./routes/backup')
+// app.use('/backup', backupRouter)
 
 const metaRouter = require('./routes/meta')
 app.use('/meta', metaRouter)
@@ -68,7 +68,7 @@ app.use('/meta', metaRouter)
 const updatesRouter = require('./routes/autoUpdates')
 app.use('/updates', updatesRouter)
 
-registerCRON('0 */5 * * *', 'daily_backup', createBackup)
+// registerCRON('0 */5 * * *', 'daily_backup', createBackup)
 
 app.set('port', process.env.PORT || 3000)
 console.log(app.get('port'))

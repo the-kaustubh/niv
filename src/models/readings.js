@@ -9,19 +9,19 @@ const nodeSchema = new mongoose.Schema({
     required: true
   },
   temperature: {
-    type: String
+    type: Number
   },
   humidity: {
-    type: String
+    type: Number
   },
   pressure: {
-    type: String
+    type: Number
   },
   co2: {
-    type: String
+    type: Number
   },
   battery: {
-    type: String
+    type: Number
   },
   datetime: {
     type: Date,

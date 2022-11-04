@@ -6,7 +6,7 @@ COPY package.json .
 
 ENV NODE_ENV=production
 
-RUN npm install --production
+RUN npm ci --production
 
 COPY src ./src
 

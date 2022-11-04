@@ -10,8 +10,6 @@ async function getUrl (req, _res, next) {
     ip: req.ip,
     method: req.method
   }
-  // console.log({ headers: req.headers })
-  // console.log({ conn: req.connection.server })
   next()
 }
 

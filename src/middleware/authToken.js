@@ -10,7 +10,7 @@ async function authenticateToken (req, res, next) {
 
   try {
     jwt.verify(token, process.env.ACCESS_TOKEN, (err, user) => {
-      if (err) throw new Error('Invalid User')
+      if (err) throw new Error('Invalid User: ' + user)
       usr = user
     })
 
@@ -26,7 +26,7 @@ async function authenticateToken (req, res, next) {
     req.user = userPresent
     next()
   } catch (e) {
-    console.err(e)
+    console.err(e.message)
     res.json({ msg: e.message })
   }
 }
