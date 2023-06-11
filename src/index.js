@@ -5,8 +5,9 @@ const app = express()
 const mongoose = require('mongoose')
 const cors = require('cors')
 const compression = require('compression')
+const redis = require('redis')
 
-const initRedisCache = require('./cache/redis')
+// const initRedisCache = require('./cache/redis')
 const cacheRoutes = require('./middleware/cacheRoutes')
 const initServer = require('./lib/InitServer')
 const setupMasterUser = require('./util/setupMasterUser')
@@ -15,6 +16,16 @@ const getUrl = require('./middleware/getUrl')
 const { createBackup } = require('./util/dbBackup')
 const { registerCRON } = require('./util/cronJob')
 
+const redisClient = redis.createClient({
+  url: process.env.REDIS_URL
+})
+redisClient.on('error', err => {
+  console.log('Error while connecting to redis ' + err)
+})
+redisClient.on('connect', () => {
+  console.log('redis connected')
+})
+redisClient.connect()
 mongoose.connect(
   process.env.DATABASE_URL,
   {
@@ -31,7 +42,6 @@ app.use(getUrl)
 
 app.disable('etag')
 
-const redisClient = initRedisCache()
 app.use(cacheRoutes(redisClient))
 
 const db = mongoose.connection

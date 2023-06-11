@@ -8,7 +8,7 @@
     "test": "nvim test/apitest.rest",
     "start": "node src/index.js",
     "serve": "nodemon src/index.js",
-    "pkg": "pkg -t node16-linux ."
+    "pkg": "pkg -t node16-linux-x64 ."
   },
   "author": "Kaustubh Murumkar",
   "license": "ISC",
